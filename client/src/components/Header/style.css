@@ -1,0 +1,15 @@
+.label {
+  height: 19px;
+  width: 71px;
+}
+.label .text-wrapper {
+  color: #343a40;
+  font-family: 'Roboto-Medium', Helvetica;
+  font-size: 16px;
+  font-weight: 500;
+  left: 0;
+  letter-spacing: 0.32px;
+  line-height: normal;
+  position: fixed;
+  top: 0;
+}

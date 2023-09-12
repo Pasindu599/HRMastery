@@ -1,0 +1,265 @@
+.template-sign-in {
+  background-color: #f9f9fa;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.template-sign-in .div {
+  background-color: #f9f9fa;
+  height: 900px;
+  position: relative;
+  width: 1440px;
+}
+
+.template-sign-in .overlap {
+  height: 900px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 769px;
+}
+
+.template-sign-in .div-left-section {
+  height: 900px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 679px;
+}
+
+.template-sign-in .overlap-group {
+  background: linear-gradient(
+    180deg,
+    rgb(89, 89, 155) 0%,
+    rgb(15, 12, 41) 0.01%,
+    rgba(229.12, 43.94, 245.23, 0.43) 83.33%
+  );
+  height: 900px;
+  position: relative;
+  width: 678px;
+}
+
+.template-sign-in .partnership-for {
+  color: #ffffff;
+  font-family: 'Zen Kaku Gothic Antique-Medium', Helvetica;
+  font-size: 48px;
+  font-weight: 500;
+  height: 183px;
+  left: 108px;
+  letter-spacing: 0;
+  line-height: 46.9px;
+  position: absolute;
+  text-align: center;
+  top: 620px;
+  width: 486px;
+}
+
+.template-sign-in .overlap-2 {
+  height: 77px;
+  left: 162px;
+  position: absolute;
+  top: 79px;
+  width: 432px;
+}
+
+.template-sign-in .foxhub-logo {
+  height: 53px;
+  left: 0;
+  position: absolute;
+  top: 11px;
+  width: 198px;
+}
+
+.template-sign-in .text-wrapper {
+  color: #ffffff;
+  font-family: 'Inter-Bold', Helvetica;
+  font-size: 64px;
+  font-weight: 700;
+  left: 59px;
+  letter-spacing: 3px;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 0;
+}
+
+.template-sign-in .pnuoy {
+  height: 590px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 115px;
+  width: 769px;
+}
+
+.template-sign-in .heading {
+  height: 85px;
+  left: 852px;
+  position: absolute;
+  top: 171px;
+  width: 434px;
+}
+
+.template-sign-in .WELCOME-BACK {
+  color: #212121;
+  font-family: 'Zen Kaku Gothic Antique-Black', Helvetica;
+  font-size: 25px;
+  font-weight: 900;
+  left: 104px;
+  letter-spacing: 0;
+  line-height: 44px;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  white-space: nowrap;
+}
+
+.template-sign-in .text-wrapper-2 {
+  color: #424242;
+  font-family: 'Zen Kaku Gothic Antique-Regular', Helvetica;
+  font-size: 16px;
+  font-weight: 400;
+  left: 138px;
+  letter-spacing: 0;
+  line-height: 28.2px;
+  position: absolute;
+  text-align: center;
+  top: 56px;
+  white-space: nowrap;
+}
+
+.template-sign-in .form {
+  align-items: flex-start;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 18px;
+  left: 866px;
+  overflow: hidden;
+  position: absolute;
+  top: 301px;
+}
+
+.template-sign-in .overlap-group-wrapper {
+  height: 72px;
+  margin-right: -2px;
+  position: relative;
+  width: 422px;
+}
+
+.template-sign-in .overlap-group-2 {
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #757575;
+  height: 74px;
+  left: -1px;
+  position: relative;
+  top: -1px;
+}
+
+.template-sign-in .text-wrapper-3 {
+  color: #424242;
+  font-family: 'Zen Kaku Gothic Antique-Regular', Helvetica;
+  font-size: 16px;
+  font-weight: 400;
+  height: 33px;
+  left: 55px;
+  letter-spacing: 0;
+  line-height: 28.2px;
+  position: absolute;
+  top: 20px;
+  white-space: nowrap;
+  width: 365px;
+}
+
+.template-sign-in .img {
+  height: 24px;
+  left: 20px;
+  position: absolute;
+  top: 24px;
+  width: 24px;
+}
+
+.template-sign-in .input-password {
+  height: 72px;
+  margin-right: -4px;
+  position: relative;
+  width: 424px;
+}
+
+.template-sign-in .overlap-3 {
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #757575;
+  height: 74px;
+  left: -1px;
+  position: relative;
+  top: -1px;
+  width: 422px;
+}
+
+.template-sign-in .overlap-group-3 {
+  height: 33px;
+  left: 56px;
+  position: absolute;
+  top: 20px;
+  width: 349px;
+}
+
+.template-sign-in .text-wrapper-4 {
+  color: #424242;
+  font-family: 'Zen Kaku Gothic Antique-Regular', Helvetica;
+  font-size: 16px;
+  font-weight: 400;
+  height: 33px;
+  left: 0;
+  letter-spacing: 0;
+  line-height: 28.2px;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+  width: 341px;
+}
+
+.template-sign-in .text-wrapper-5 {
+  color: #9e9e9e;
+  font-family: 'Zen Kaku Gothic Antique-Regular', Helvetica;
+  font-size: 10.2px;
+  font-weight: 400;
+  left: 319px;
+  letter-spacing: 0;
+  line-height: 22.5px;
+  position: absolute;
+  text-align: right;
+  top: 4px;
+  white-space: nowrap;
+}
+
+.template-sign-in .overlap-4 {
+  background-color: #b200cf;
+  height: 72px;
+  position: relative;
+  width: 420px;
+}
+
+.template-sign-in .text-wrapper-6 {
+  color: #ffffff;
+  font-family: 'Zen Kaku Gothic Antique-Black', Helvetica;
+  font-size: 24px;
+  font-weight: 900;
+  left: 40px;
+  letter-spacing: 0;
+  line-height: 28.2px;
+  position: absolute;
+  top: 22px;
+  white-space: nowrap;
+}
+
+.template-sign-in .ex-icon-arrow-right {
+  height: 32px !important;
+  left: 356px !important;
+  position: absolute !important;
+  top: 20px !important;
+  width: 32px !important;
+}
