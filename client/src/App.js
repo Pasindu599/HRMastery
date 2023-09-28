@@ -2,14 +2,11 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './screens/Login';
-import Menu from './components/Menu';
-import Profile from './screens/Profile';
+import Menu from './components/Menu/SideDrawer';
+import EditProfile from './screens/ProfileEdit/index';
+import Header from './components/Header/index';
 function App() {
-  return (
-    <div className="App">
-      <Profile />
-    </div>
-  );
+  return <EditProfile />;
 }
 
 export default App;
