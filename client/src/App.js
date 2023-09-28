@@ -5,8 +5,9 @@ import Login from './screens/Login';
 import Menu from './components/Menu/SideDrawer';
 import EditProfile from './screens/ProfileEdit/index';
 import Header from './components/Header/index';
+import LeavingRequest from './screens/LeavingReport';
 function App() {
-  return <EditProfile />;
+  return <LeavingRequest />;
 }
 
 export default App;
