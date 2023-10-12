@@ -27,6 +27,7 @@ import { createTheme } from '@mui/material/styles';
 import { purple, lime } from '@mui/material/colors';
 import { makeStyles } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 300;
 
@@ -46,19 +47,23 @@ const theme = createTheme({
   },
 });
 
-export default function SideDrawer() {
+export default function SideDrawer(props) {
+  const navigate = useNavigate();
   const [drawerBackground, setDrawerBackground] = React.useState('#B514EE'); // Initialize background color
-  const [clicked, setClicked] = React.useState(false);
+
   const [openList, setOpenList] = React.useState(false);
 
-  const handleBackgroundChange = () => {
-    // Change the background color when the button is clicked
-    setDrawerBackground('#343A40');
-    setClicked(true);
-  };
+  // const handleBackgroundChange = () => {
+  //   // Change the background color when the button is clicked
+  //   setDrawerBackground('#343A40');
+  // };
 
   const handleClick = () => {
     setOpenList(!openList);
+  };
+
+  const handeleRequestLeave = () => {
+    navigate('/leaving-request');
   };
 
   const theme = useTheme();
@@ -89,27 +94,21 @@ export default function SideDrawer() {
             <ListItem sx={{ padding: '2' }}>
               <ListItemButton
                 component="a"
-                href="#Report"
                 sx={{
-                  backgroundColor: drawerBackground,
-                  color: clicked ? 'white' : 'inherit',
+                  // backgroundColor: drawerBackground,
+                  color: 'inherit',
                   borderRadius: '20px',
-                  ':hover': {
-                    backgroundColor: clicked ? '#343A40' : '#B514EE',
-                    color: clicked ? 'white' : 'inherit',
-                  },
+
+                  backgroundColor: drawerBackground,
                 }}
-                onClick={() => handleBackgroundChange()}
               >
-                <ListItemIcon
-                  sx={{ marginLeft: 4, color: clicked ? 'white' : 'inherit' }}
-                >
+                <ListItemIcon sx={{ marginLeft: 4, color: 'inherit' }}>
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary="User Profile" sx={{ marginRight: 4 }} />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding>
+            <ListItem sx={{ padding: '2' }}>
               <ListItemButton onClick={handleClick}>
                 <ListItemIcon sx={{ marginLeft: 4 }}>
                   <InboxIcon />
@@ -123,7 +122,15 @@ export default function SideDrawer() {
             </ListItem>
             <Collapse in={openList} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 10 }}>
+                <ListItemButton
+                  sx={{
+                    pl: 10,
+                    color: 'inherit',
+                    borderRadius: '20px',
+
+                    backgroundColor: drawerBackground,
+                  }}
+                >
                   <ListItemIcon>
                     <StarBorder />
                   </ListItemIcon>
@@ -137,50 +144,126 @@ export default function SideDrawer() {
                 </ListItemButton>
               </List>
             </Collapse>
-            <ListItem disablePadding>
-              <ListItemButton component="a" href="#Report">
+            <ListItem sx={{ padding: '2' }}>
+              <ListItemButton
+                component="a"
+                onClick={handeleRequestLeave}
+                sx={{
+                  color: 'inherit',
+                  borderRadius: '20px',
+
+                  backgroundColor: drawerBackground,
+                }}
+              >
                 <ListItemIcon sx={{ marginLeft: 4 }}>
                   <InboxIcon />
                 </ListItemIcon>
-                <ListItemText primary="Request Leave" sx={{ marginRight: 4 }} />
+                <ListItemText
+                  primary="Request Leave"
+                  sx={{ marginRight: 4, color: 'inherit' }}
+                />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component="a" href="#Report">
+            <ListItem sx={{ padding: '2' }}>
+              <ListItemButton
+                component="a"
+                href="#Report"
+                sx={{
+                  color: 'inherit',
+                  borderRadius: '20px',
+
+                  backgroundColor: drawerBackground,
+                }}
+              >
                 <ListItemIcon sx={{ marginLeft: 4 }}>
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Approve Leaves"
-                  sx={{ marginRight: 4 }}
+                  sx={{ marginRight: 4, color: 'inherit' }}
                 />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component="a" href="#Report">
+            <ListItem sx={{ padding: '2' }}>
+              <ListItemButton
+                component="a"
+                href="#Report"
+                sx={{
+                  color: 'inherit',
+                  borderRadius: '20px',
+
+                  backgroundColor: drawerBackground,
+                }}
+              >
                 <ListItemIcon sx={{ marginLeft: 4 }}>
                   <InboxIcon />
                 </ListItemIcon>
-                <ListItemText primary="Report" sx={{ marginRight: 4 }} />
+                <ListItemText
+                  primary="Report"
+                  sx={{ marginRight: 4, color: 'inherit' }}
+                />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component="a" href="#Report">
+            <ListItem sx={{ padding: '2' }}>
+              <ListItemButton
+                component="a"
+                href="#Report"
+                sx={{
+                  color: 'inherit',
+                  borderRadius: '20px',
+
+                  backgroundColor: drawerBackground,
+                }}
+              >
                 <ListItemIcon sx={{ marginLeft: 4 }}>
                   <InboxIcon />
                 </ListItemIcon>
-                <ListItemText primary="Settings" sx={{ marginRight: 4 }} />
+                <ListItemText
+                  primary="Custom Variables"
+                  sx={{ marginRight: 4, color: 'inherit' }}
+                />
+              </ListItemButton>
+            </ListItem>
+            <ListItem sx={{ padding: '2' }}>
+              <ListItemButton
+                component="a"
+                href="#Report"
+                sx={{
+                  color: 'inherit',
+                  borderRadius: '20px',
+
+                  backgroundColor: drawerBackground,
+                }}
+              >
+                <ListItemIcon sx={{ marginLeft: 4 }}>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Settings"
+                  sx={{ marginRight: 4, color: 'inherit' }}
+                />
               </ListItemButton>
             </ListItem>
           </List>
           <Divider></Divider>
           <List>
-            <ListItem disablePadding>
-              <ListItemButton component="a">
+            <ListItem sx={{ padding: '2' }}>
+              <ListItemButton
+                component="a"
+                sx={{
+                  color: 'inherit',
+                  borderRadius: '20px',
+
+                  backgroundColor: drawerBackground,
+                }}
+              >
                 <ListItemIcon sx={{ marginLeft: 4 }}>
                   <InboxIcon />
                 </ListItemIcon>
-                <ListItemText primary="Log Out" sx={{ marginRight: 4 }} />
+                <ListItemText
+                  primary="Log Out"
+                  sx={{ marginRight: 4, color: 'inherit' }}
+                />
               </ListItemButton>
             </ListItem>
           </List>

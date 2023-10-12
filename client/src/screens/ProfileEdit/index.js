@@ -10,21 +10,39 @@ import { AccountProfile } from '../Profile/components/account-profile';
 import { AccountProfileDetails } from '../Profile/components/account-profile-details';
 import Button from '@mui/material/Button';
 import { colors } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 
-function EditProfile() {
+function EditProfile(children) {
+  const navigate = useNavigate();
+  const { role, id } = useParams();
+
+  const location = useLocation();
+  console.log('ProfileEdit');
+  console.log(location.state);
+
   const [edit, setEdit] = useState(false);
-  const [editButton, setEditButton] = useState(true);
+  const [editButton, setEditButton] = useState(false);
+
+  // set editable to true or false
+  useEffect(() => {
+    if (role === 'Admin' || role === 'HR') {
+      setEditButton(true);
+    } else {
+      setEditButton(false);
+    }
+  }, [role]);
 
   const handleEdit = () => {
     setEdit(true);
+    setEditButton(false);
   };
 
   return (
     <>
       <Home />
       <Box sx={{ display: 'flex' }}>
-        <SideDrawer />
+        <SideDrawer></SideDrawer>
         <Box
           component="main"
           sx={{ flexGrow: 1, p: 3, backgroundColor: '#F8E5FF' }}
@@ -46,18 +64,20 @@ function EditProfile() {
                 <div>
                   <Grid container spacing={3}>
                     <Grid xs={12} md={3.5} lg={3}>
-                      <AccountProfile />
+                      <AccountProfile>{location.state}</AccountProfile>
                       <br />
                       <Button
                         fullWidth
                         variant="contained"
                         sx={{
                           backgroundColor: '#B514EE', // Set the initial background color
-                          ':hover': {
-                            backgroundColor: colors.purple[500], // Change background color on hover
+
+                          '&:hover': {
+                            backgroundColor: '#B514EE', // Change background color on hover
                           },
+
                           ':active': {
-                            backgroundColor: colors.purple[700], // Change background color when active (clicked)
+                            backgroundColor: '#B514EE', // Change background color when active (clicked)
                           },
 
                           borderRadius: '20px',

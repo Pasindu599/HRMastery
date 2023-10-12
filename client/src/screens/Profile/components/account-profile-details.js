@@ -99,12 +99,8 @@ export const AccountProfileDetails = (props) => {
     }));
   }, []);
 
-  const handleSubmit = useCallback((event) => {
-    event.preventDefault();
-  }, []);
-
   return (
-    <form autoComplete="off" noValidate onSubmit={handleSubmit}>
+    <form autoComplete="off" noValidate>
       <Card
         sx={{
           backgroundColor: '#F8E5FF',
@@ -464,7 +460,7 @@ export const AccountProfileDetails = (props) => {
             Save details
           </Button>
         </Grid>
-        <Grid xs={12} md={4}>
+        {/* <Grid xs={12} md={4}>
           <Button
             variant="contained"
             sx={{
@@ -477,12 +473,11 @@ export const AccountProfileDetails = (props) => {
               },
 
               borderRadius: '20px',
-              display: editable ? 'flex' : 'none',
+              display: editable ? 'none' : 'flex',
             }}
-          >
-            Add/View Custom Fields
+          >View Custom Fields
           </Button>
-        </Grid>
+        </Grid> */}
       </Grid>
     </form>
   );
