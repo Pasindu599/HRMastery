@@ -6,19 +6,37 @@ import Menu from './components/Menu/SideDrawer';
 import EditProfile from './screens/ProfileEdit/index';
 import Header from './components/Header/index';
 import LeavingRequest from './screens/LeavingReport';
+import Table from './components/Table/Table';
+import AllEmployee from './screens/Employee/AllEmployee';
+
+const USER_TYPE = {
+  ADMIN: 'admin',
+  HR: 'hr',
+  EMPLOYEE: 'employee',
+};
 
 function App() {
   return (
-    // <Router>
-    //   <Routes>
-    //     <Route path="/" element={<Login />} />
-    //     <Route path="/home" element={<Header />} />
-    //     <Route path="/profile" element={<EditProfile />} />
-    //     <Route path="/leaving" element={<LeavingRequest />} />
-    //   </Routes>
-    // </Router>
-    <Login />
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <PublicElement>
+            <Login />
+          </PublicElement>
+        }
+      />
+      <Route path="/profile/:role/:id" element={<EditProfile />} />
+      <Route path="/leaving-request/:role/" element={<LeavingRequest />} />
+      <Route path="/all-employee/:role/" element={<AllEmployee />} />
+
+      <Route path="*" element={<div>Page Not Found</div>} />
+    </Routes>
   );
+}
+
+function PublicElement({ children }) {
+  return <div>{children}</div>;
 }
 
 export default App;

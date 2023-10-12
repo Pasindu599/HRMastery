@@ -1,25 +1,73 @@
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import { Container } from '@mui/material';
 import backgroundImg from '../../assets/login_pic.png';
 import { Engineering } from '@mui/icons-material';
+import { useState } from 'react';
+import Typography from '@mui/material/Typography';
+import { BrowserRouter as Routers, Route, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Login() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('username'),
-      password: data.get('password'),
-    });
+  const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const data = {
+      username: username,
+      password: password,
+    };
+    axios
+      .post('http://localhost:8000/api/login', data)
+      .then((res) => {
+        console.log(res);
+        if (res.data.Status === 'Success') {
+          console.log(res);
+          const employee_role = res.data.data.role;
+          const employee_data = res.data.data;
+          console.log(employee_role);
+          if (employee_role === 'Admin') {
+            navigate(
+              'profile/' + employee_role + '/' + employee_data.employee_id,
+              {
+                state: employee_data,
+              }
+            );
+          } else if (employee_role === 'HR') {
+            navigate(
+              'profile/' + employee_role + '/' + employee_data.employee_id,
+              {
+                state: employee_data,
+              }
+            );
+          } else if (employee_role === 'Employee') {
+            navigate(
+              'profile/' + employee_role + '/' + employee_data.employee_id,
+              {
+                state: employee_data,
+              }
+            );
+          }
+        } else {
+          alert('Invalid Username or Password');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -144,6 +192,8 @@ export default function Login() {
                   name="username"
                   autoComplete="username"
                   autoFocus
+                  value={username}
+                  onChange={handleUsernameChange}
                 />
                 <TextField
                   margin="normal"
@@ -154,6 +204,8 @@ export default function Login() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  value={password}
+                  onChange={handlePasswordChange}
                 />
 
                 <Button
@@ -165,6 +217,7 @@ export default function Login() {
                     background: '#B514EE',
                     ':hover': { background: '#B514EE' },
                   }}
+                  onClick={handleSubmit}
                 >
                   Sign In
                 </Button>
