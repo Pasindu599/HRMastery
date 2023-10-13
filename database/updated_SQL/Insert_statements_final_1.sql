@@ -32,7 +32,7 @@ INSERT INTO `HRM`.`pay_grades` (`pay_grade`) VALUES ('Level 4');
 
 -- user account roles
 INSERT INTO `HRM`.`user_account_roles` (`role`) VALUES ('Admin');
-INSERT INTO `HRM`.`user_account_roles` (`role`) VALUES ('HR Manager');
+INSERT INTO `HRM`.`user_account_roles` (`role`) VALUES ('HR');
 INSERT INTO `HRM`.`user_account_roles` (`role`) VALUES ('Employee');
 
 -- num_of_leaving_days
