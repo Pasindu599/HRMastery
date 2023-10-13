@@ -1,4 +1,4 @@
-
+use hrm;
 -- departments
 INSERT INTO `departments` (`name`) VALUES ('Men\'s Wear');
 INSERT INTO `departments` (`name`) VALUES ('Women\'s Wear');
