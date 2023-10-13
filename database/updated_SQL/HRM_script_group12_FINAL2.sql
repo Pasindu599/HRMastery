@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `HRM`.`employees` (
   `gender` ENUM('male', 'female') NOT NULL CHECK (gender = 'male' OR gender = 'female'),
   `birthdate` DATE NOT NULL,
   `marital_status` TINYINT NOT NULL,
-  `supervisor_id` INT ,
+  `supervisor_id` CHAR(5),
   `department_id` INT NOT NULL,
   `pay_grade_id` INT NOT NULL,
   `employee_status_id` INT NOT NULL,
