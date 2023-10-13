@@ -47,7 +47,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `HRM`.`employment_statuses` ;
 
 CREATE TABLE IF NOT EXISTS `HRM`.`employment_statuses` (
-  `employee_status_id` INT NOT NULL,
+  `employee_status_id` INT NOT NULL AUTO_INCREMENT,
   `status` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`employee_status_id`),
   UNIQUE INDEX `status_UNIQUE` (`status` ASC) VISIBLE)
@@ -131,7 +131,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `HRM`.`leave_requests` ;
 
 CREATE TABLE IF NOT EXISTS `HRM`.`leave_requests` (
-  `request_id` INT NOT NULL,
+  `request_id` INT NOT NULL AUTO_INCREMENT,
   `reason` TEXT NOT NULL,
   `leave_day_count` INT NOT NULL,
   `request_date` DATETIME NOT NULL,
