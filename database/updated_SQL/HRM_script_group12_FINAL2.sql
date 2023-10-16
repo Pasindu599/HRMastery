@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `HRM`.`leave_requests` (
   CONSTRAINT `fk_leave_requests_employees1`
     FOREIGN KEY (`employee_id`)
     REFERENCES `HRM`.`employees` (`employee_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_leave_requests_leave_types1`
     FOREIGN KEY (`leave_type_id`)
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `HRM`.`remaining_leaving_days` (
   CONSTRAINT `fk_remaining_leaving_days_employees1`
     FOREIGN KEY (`employee_id`)
     REFERENCES `HRM`.`employees` (`employee_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
@@ -212,7 +212,7 @@ CREATE TABLE IF NOT EXISTS `HRM`.`user_accounts` (
   CONSTRAINT `fk_user_accounts_employees1`
     FOREIGN KEY (`employee_id`)
     REFERENCES `HRM`.`employees` (`employee_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_user_accounts_user_account_roles1`
     FOREIGN KEY (`role_id`)
@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS `HRM`.`emergency_contact_details` (
   CONSTRAINT `fk_emergency_contact_details_employees1`
     FOREIGN KEY (`employee_id`)
     REFERENCES `HRM`.`employees` (`employee_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
@@ -283,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `HRM`.`dependents` (
   CONSTRAINT `fk_dependent_employees1`
     FOREIGN KEY (`employee_id`)
     REFERENCES `HRM`.`employees` (`employee_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
