@@ -23,28 +23,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-const gender = [
-  {
-    value: 'male',
-    label: 'Male',
-  },
-  {
-    value: 'female',
-    label: 'Female',
-  },
-];
-
-const maritalStatus = [
-  {
-    value: 1,
-    label: 'Married',
-  },
-  {
-    value: 0,
-    label: 'Unmarried',
-  },
-];
-
 const defaultLableNames = [
   'employee_id',
 
@@ -58,44 +36,81 @@ const defaultLableNames = [
   'job_title_id',
 ];
 
-export const AccountProfileDetails = (props) => {
-  const { role, id } = useParams();
-  const { editable, accountTypes } = props;
+export const ProfileAdd = (props) => {
+  const { role } = useParams();
+  const gender = [
+    {
+      value: 'male',
+      label: 'Male',
+    },
+    {
+      value: 'female',
+      label: 'Female',
+    },
+  ];
+
+  const maritalStatus = [
+    {
+      value: 1,
+      label: 'Married',
+    },
+    {
+      value: 0,
+      label: 'Unmarried',
+    },
+  ];
+
+  // const accountTypes = [
+  //   {
+  //     value: 'Admin',
+  //     label: 'Admin',
+  //   },
+  //   {
+  //     value: 'HR',
+  //     label: 'HR Manager',
+  //   },
+  //   {
+  //     value: 'Employee',
+  //     label: 'Employee',
+  //   },
+  // ];
+  if (role === 'Admin') {
+    var accountTypes = [
+      {
+        value: 'HR',
+        label: 'HR Manager',
+      },
+      {
+        value: 'Employee',
+        label: 'Employee',
+      },
+    ];
+  } else if (role === 'HR') {
+    var accountTypes = [
+      {
+        value: 'Employee',
+        label: 'Employee',
+      },
+    ];
+  } else if (role === 'Employee') {
+    var accountTypes = [
+      {
+        value: 'Employee',
+        label: 'Employee',
+      },
+    ];
+  }
+
   const [lableNames, setLableNames] = useState([]);
   const [customAttributes, setCustomAttributes] = useState([]);
 
   const [allDetails, setAllDetails] = useState([]);
   const [birthday, setBirthday] = React.useState(null);
-  const [allDepartments, setAllDepartments] = useState([]);
-  const [allPayGrades, setAllPayGrades] = useState([]);
-  const [allEmployeeStatus, setAllEmployeeStatus] = useState([]);
-  const [allJobTitles, setAllJobTitles] = useState([]);
+  const [values, setValues] = useState({});
+  const [contactValues, setContactValues] = useState({});
+  const [DepartmentValues, setDepartmentValues] = useState({});
 
-  const [values, setValues] = useState({
-    firstName: '',
-    lastName: '',
-    gender: '',
-    maritalStatus: '',
-    supervisorId: '',
-    payGradeId: '',
-    employeeStatusId: '',
-    jobTitleId: '',
-  });
-  const [contactValues, setContactValues] = useState({
-    contact_name: '',
-    relationship: '',
-    phoneNumber: '',
-  });
-  const [DepartmentValues, setDepartmentValues] = useState({
-    departmentName: '',
-  });
-
-  const [accountValues, setAccountValues] = useState({
-    username: '',
-    password: '',
-    email: '',
-    role: '',
-  });
+  const [accountValues, setAccountValues] = useState({});
 
   useEffect(() => {
     console.log('AccountProfileDetails');
@@ -107,113 +122,26 @@ export const AccountProfileDetails = (props) => {
           fieldNames.push(item.Field);
         }
         setLableNames(fieldNames);
-        console.log('fieldNames');
-        console.log(fieldNames);
-        // const newCustomAttributes = [];
-        // for (const item of fieldNames) {
-        //   if (!defaultLableNames.includes(item)) {
-        //     console.log(item);
-        //     newCustomAttributes.push(item);
-        //   }
-        // }
-        // setCustomAttributes(newCustomAttributes);
-        // console.log(customAttributes);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    //check is there any lable name not in default lable names
-
-    axios
-      .get(`http://localhost:8000/emp/employee/details/${id}`)
-      .then((response) => {
-        console.log(response.data.data[0]);
-        setAllDetails(response.data.data[0]);
-        setValues({
-          firstName: response.data.data[0].first_name,
-          lastName: response.data.data[0].last_name,
-          gender: response.data.data[0].gender,
-          maritalStatus: response.data.data[0].marital_status,
-          supervisorId: response.data.data[0].supervisor_id,
-          payGradeId: response.data.data[0].pay_grade_id,
-          employeeStatusId: response.data.data[0].employee_status_id,
-          jobTitleId: response.data.data[0].job_title_id,
-        });
-        setBirthday(dayjs(response.data.data[0].birthdate));
-        setContactValues({
-          contact_name: response.data.data[0].contact_name,
-          relationship: response.data.data[0].relationship,
-          phoneNumber: response.data.data[0].contact_number,
-        });
-        setDepartmentValues({
-          departmentName: response.data.data[0].name,
-        });
-
-        const customAttributeValues = {};
-        for (const item of lableNames) {
+        const newCustomAttributes = [];
+        for (const item of fieldNames) {
           if (!defaultLableNames.includes(item)) {
-            console.log('item');
             console.log(item);
-            customAttributeValues[item] = response.data.data[0][item];
+            newCustomAttributes.push(item);
           }
         }
-
-        setCustomAttributes(customAttributeValues);
-        console.log('customAttribute');
+        setCustomAttributes(newCustomAttributes);
         console.log(customAttributes);
       })
       .catch((error) => {
         console.log(error);
       });
-
-    axios
-      .get(`http://localhost:8000/emp/employee/account/${id}`)
-      .then((response) => {
-        console.log(response.data.data[0]);
-        setAccountValues({
-          username: response.data.data[0].username,
-          password: response.data.data[0].password,
-          email: response.data.data[0].user_email,
-          role: response.data.data[0].role,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    axios.get('http://localhost:8000/branch/deparments/').then((response) => {
-      console.log(response.data.data);
-      setAllDepartments(response.data.data);
-    });
-
-    axios.get('http://localhost:8000/branch/pay-grades/').then((response) => {
-      console.log(response.data.data);
-      setAllPayGrades(response.data.data);
-    });
-
-    axios
-      .get('http://localhost:8000/branch/employee-status/')
-      .then((response) => {
-        console.log(response.data.data);
-        setAllEmployeeStatus(response.data.data);
-      });
-
-    axios.get('http://localhost:8000/branch/job-titles/').then((response) => {
-      console.log(response.data.data);
-      setAllJobTitles(response.data.data);
-      if (role === 'Employee' || role === 'HR') {
-        setAllJobTitles(
-          response.data.data.filter(
-            (item) =>
-              item.job_title === 'HR Manager' || item.job_title === 'Admin'
-          )
-        );
-      }
-    });
+    //check is there any lable name not in default lable names
   }, []);
 
+  const { editable } = props;
+
   const handleChange = useCallback((event) => {
-    setValues((prevState) => ({
+    setAccountValues((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
@@ -235,13 +163,6 @@ export const AccountProfileDetails = (props) => {
 
   const handleChangeDepartmentDeatils = useCallback((event) => {
     setDepartmentValues((prevState) => ({
-      ...prevState,
-      [event.target.name]: event.target.value,
-    }));
-  }, []);
-
-  const handleChangeCustomAttributeDeatils = useCallback((event) => {
-    setCustomAttributes((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
@@ -343,88 +264,6 @@ export const AccountProfileDetails = (props) => {
                   {maritalStatus.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
-                    </option>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="Supervisor ID"
-                  name="supervisorId"
-                  onChange={handleChange}
-                  required
-                  value={values.supervisorId}
-                  disabled={!editable}
-                  className={editable ? '' : 'disabled-text-field'}
-                />
-              </Grid>
-              <Grid xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="Pay Grade"
-                  name="payGrade"
-                  onChange={handleChange}
-                  required
-                  select
-                  SelectProps={{ native: true }}
-                  value={values.payGradeId}
-                  disabled={!editable}
-                  className={editable ? '' : 'disabled-text-field'}
-                >
-                  {allPayGrades.map((option) => (
-                    <option
-                      key={option.pay_grade_id}
-                      value={option.pay_grade_id}
-                    >
-                      {option.pay_grade}
-                    </option>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="Employee Status"
-                  name="employeeStatusId"
-                  onChange={handleChange}
-                  required
-                  select
-                  SelectProps={{ native: true }}
-                  value={values.employeeStatusId}
-                  disabled={!editable}
-                  className={editable ? '' : 'disabled-text-field'}
-                >
-                  {allEmployeeStatus.map((option) => (
-                    <option
-                      key={option.employee_status_id}
-                      value={option.employee_status_id}
-                    >
-                      {option.status}
-                    </option>
-                  ))}
-                </TextField>
-              </Grid>
-
-              <Grid xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="Job Title"
-                  name="jobTitleId"
-                  onChange={handleChange}
-                  required
-                  select
-                  SelectProps={{ native: true }}
-                  value={values.jobTitleId}
-                  disabled={!editable}
-                  className={editable ? '' : 'disabled-text-field'}
-                >
-                  {allJobTitles.map((option) => (
-                    <option
-                      key={option.job_title_id}
-                      value={option.job_title_id}
-                    >
-                      {option.job_title}
                     </option>
                   ))}
                 </TextField>
@@ -567,21 +406,10 @@ export const AccountProfileDetails = (props) => {
                   name="departmentName"
                   onChange={handleChangeDepartmentDeatils}
                   required
-                  select
-                  SelectProps={{ native: true }}
                   value={DepartmentValues.departmentName}
                   disabled={!editable}
                   className={editable ? '' : 'disabled-text-field'}
-                >
-                  {allDepartments.map((option) => (
-                    <option
-                      key={option.deparment_id}
-                      value={option.department_id}
-                    >
-                      {option.name}
-                    </option>
-                  ))}
-                </TextField>
+                />
               </Grid>
             </Grid>
           </Box>
@@ -590,11 +418,7 @@ export const AccountProfileDetails = (props) => {
       {/* <Divider />
 
         <Divider /> */}
-      <Box
-        sx={{
-          display: Object.keys(customAttributes).length > 0 ? 'block' : 'none',
-        }}
-      >
+      <Box sx={{ display: customAttributes.length > 0 ? 'block' : 'none' }}>
         <br></br>
       </Box>
 
@@ -605,7 +429,7 @@ export const AccountProfileDetails = (props) => {
           border: '1px solid rgba(73, 2, 106, 0.60)',
           boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
           padding: '20px',
-          display: Object.keys(customAttributes).length > 0 ? 'block' : 'none',
+          display: customAttributes.length > 0 ? 'block' : 'none',
         }}
       >
         <CardHeader
@@ -649,18 +473,16 @@ export const AccountProfileDetails = (props) => {
                   disabled={!editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
-
               </Grid> */}
-
-              {Object.keys(customAttributes).map((attribute) => (
+              {customAttributes.map((attribute) => (
                 <Grid xs={12} md={6}>
                   <TextField
                     fullWidth
                     label={attribute}
                     name={attribute}
-                    onChange={handleChangeCustomAttributeDeatils}
+                    onChange={handleChangeDepartmentDeatils}
                     required
-                    value={customAttributes[attribute]}
+                    value={allDetails[attribute]}
                     disabled={!editable}
                     className={editable ? '' : 'disabled-text-field'}
                   />
@@ -704,7 +526,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeAccountDetails}
                   required
                   value={accountValues.username}
-                  disabled={true}
+                  disabled={role === 'Employee' ? true : false}
                   className={'disabled-text-field'}
                 />
               </Grid>
@@ -727,7 +549,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeAccountDetails}
                   required
                   value={accountValues.password}
-                  disabled={true}
+                  disabled={role === 'Employee' ? true : false}
                   className={'disabled-text-field'}
                 />
               </Grid>
@@ -739,7 +561,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeAccountDetails}
                   required
                   value={accountValues.email}
-                  disabled={true}
+                  disabled={role === 'Employee' ? true : false}
                   className={'disabled-text-field'}
                 />
               </Grid>
@@ -753,7 +575,7 @@ export const AccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={accountValues.role}
-                  disabled={true}
+                  disabled={role === 'Employee' ? true : false}
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {accountTypes.map((option) => (

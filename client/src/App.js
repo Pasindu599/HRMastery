@@ -8,6 +8,8 @@ import Header from './components/Header/index';
 import LeavingRequest from './screens/LeavingReport';
 import Table from './components/Table/Table';
 import AllEmployee from './screens/Employee/AllEmployee';
+import NewEmployee from './screens/Employee/NewEmployee/NewEmployee';
+import OtherProfile from './screens/ProfileEdit/otherProfile';
 
 const USER_TYPE = {
   ADMIN: 'admin',
@@ -27,8 +29,13 @@ function App() {
         }
       />
       <Route path="/profile/:role/:id" element={<EditProfile />} />
+      <Route
+        path="/profile/:role/:id/:other/:otherid"
+        element={<OtherProfile />}
+      />
       <Route path="/leaving-request/:role/" element={<LeavingRequest />} />
-      <Route path="/all-employee/:role/" element={<AllEmployee />} />
+      <Route path="/all-employee/:role/:id/" element={<AllEmployee />} />
+      <Route path="/new-employee/:role/:id" element={<NewEmployee />} />
 
       <Route path="*" element={<div>Page Not Found</div>} />
     </Routes>

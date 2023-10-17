@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTable, useGlobalFilter, usePagination } from 'react-table';
-import MOCK_DATA from './MOCK_DATA.json';
+
 import { COLUMNS } from './columns';
 import './Table.css';
 import GlobalFilter from './GlobalFilter';
@@ -8,12 +8,26 @@ import { Grid, Icon, IconButton, colors, Box } from '@mui/material';
 import { Button } from '@mui/material';
 import { Edit, Height, Maximize } from '@mui/icons-material';
 import { Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
-const Table = () => {
+const Table = (props) => {
+  const { role_type, user_id } = props;
+
   const navigate = useNavigate();
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => MOCK_DATA, []);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:8000/emp/employee/table/')
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const {
     getTableProps,
@@ -72,6 +86,13 @@ const Table = () => {
               borderRadius: '20px',
               marginLeft: '20px',
             }}
+            onClick={() => {
+              //refresh this pagE
+              navigate('/new-employee/' + role_type + '/' + user_id);
+            }}
+            disabled={
+              role_type === 'Admin' || role_type === 'HR' ? false : true
+            }
           >
             Add Employee
           </Button>
@@ -117,13 +138,20 @@ const Table = () => {
                         marginLeft: '20px',
                       }}
                       onClick={() => {
-                        navigate('/profile', {
-                          state: {
-                            id: row.original.id,
-                            first_name: row.original.first_name,
-                            last_name: row.original.last_name,
-                          },
-                        });
+                        //refresh this pagE
+                        navigate(
+                          '/profile/' +
+                            role_type +
+                            '/' +
+                            user_id +
+                            '/' +
+                            (row.original.role === null
+                              ? 'Null'
+                              : row.original.role) +
+                            '/' +
+                            row.original.employee_id,
+                          { state: row.original }
+                        );
                       }}
                     >
                       <Edit

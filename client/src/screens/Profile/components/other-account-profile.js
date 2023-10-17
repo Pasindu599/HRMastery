@@ -58,11 +58,13 @@ const defaultLableNames = [
   'job_title_id',
 ];
 
-export const AccountProfileDetails = (props) => {
-  const { role, id } = useParams();
-  const { editable, accountTypes } = props;
+export const OtherAccountProfileDetails = (props) => {
+  const { role, id, otherid, other } = useParams();
+  const { editable, accountTypes, roleEdit } = props;
+  console.log('OtherAccountProfileDetails');
+  console.log(role, id, otherid, other);
   const [lableNames, setLableNames] = useState([]);
-  const [customAttributes, setCustomAttributes] = useState([]);
+  const [customAttributes, setCustomAttributes] = useState({});
 
   const [allDetails, setAllDetails] = useState([]);
   const [birthday, setBirthday] = React.useState(null);
@@ -107,25 +109,28 @@ export const AccountProfileDetails = (props) => {
           fieldNames.push(item.Field);
         }
         setLableNames(fieldNames);
-        console.log('fieldNames');
         console.log(fieldNames);
-        // const newCustomAttributes = [];
+        // const customAttributeValues = {};
         // for (const item of fieldNames) {
         //   if (!defaultLableNames.includes(item)) {
+        //     console.log('item');
         //     console.log(item);
-        //     newCustomAttributes.push(item);
+        //     customAttributeValues[item] = '';
         //   }
         // }
-        // setCustomAttributes(newCustomAttributes);
-        // console.log(customAttributes);
+
+        // setCustomAttributes(customAttributeValues);
+        // console.log('customAttributeValues');
+        // console.log(customAttributeValues);
       })
+
       .catch((error) => {
         console.log(error);
       });
     //check is there any lable name not in default lable names
 
     axios
-      .get(`http://localhost:8000/emp/employee/details/${id}`)
+      .get(`http://localhost:8000/emp/employee/details/${otherid}`)
       .then((response) => {
         console.log(response.data.data[0]);
         setAllDetails(response.data.data[0]);
@@ -148,7 +153,12 @@ export const AccountProfileDetails = (props) => {
         setDepartmentValues({
           departmentName: response.data.data[0].name,
         });
-
+        // setAccountValues({
+        //   username: response.data.data[0].username,
+        //   password: response.data.data[0].password,
+        //   email: response.data.data[0].email,
+        //   role: response.data.data[0].role,
+        // });
         const customAttributeValues = {};
         for (const item of lableNames) {
           if (!defaultLableNames.includes(item)) {
@@ -167,7 +177,7 @@ export const AccountProfileDetails = (props) => {
       });
 
     axios
-      .get(`http://localhost:8000/emp/employee/account/${id}`)
+      .get(`http://localhost:8000/emp/employee/account/${otherid}`)
       .then((response) => {
         console.log(response.data.data[0]);
         setAccountValues({
@@ -649,8 +659,23 @@ export const AccountProfileDetails = (props) => {
                   disabled={!editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
-
               </Grid> */}
+              {/* {customAttributes.map((attribute) => (
+                <Grid xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label={attribute}
+                    name={attribute}
+                    onChange={handleChangeCustomAttributeDeatils}
+                    required
+                    value=""
+                    disabled={!editable}
+                    className={editable ? '' : 'disabled-text-field'}
+                  />
+                </Grid>
+
+
+              ))} */}
 
               {Object.keys(customAttributes).map((attribute) => (
                 <Grid xs={12} md={6}>
@@ -704,7 +729,11 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeAccountDetails}
                   required
                   value={accountValues.username}
-                  disabled={true}
+                  disabled={
+                    other === 'Null' && (role === 'HR' || role === 'Admin')
+                      ? false
+                      : true
+                  }
                   className={'disabled-text-field'}
                 />
               </Grid>
@@ -727,7 +756,11 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeAccountDetails}
                   required
                   value={accountValues.password}
-                  disabled={true}
+                  disabled={
+                    other === 'Null' && (role === 'HR' || role === 'Admin')
+                      ? false
+                      : true
+                  }
                   className={'disabled-text-field'}
                 />
               </Grid>
@@ -739,7 +772,11 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeAccountDetails}
                   required
                   value={accountValues.email}
-                  disabled={true}
+                  disabled={
+                    other === 'Null' && (role === 'HR' || role === 'Admin')
+                      ? false
+                      : true
+                  }
                   className={'disabled-text-field'}
                 />
               </Grid>
@@ -748,12 +785,12 @@ export const AccountProfileDetails = (props) => {
                   fullWidth
                   label="Account Type"
                   name="role"
-                  onChange={handleChange}
+                  onChange={handleChangeAccountDetails}
                   required
                   select
                   SelectProps={{ native: true }}
-                  value={accountValues.role}
-                  disabled={true}
+                  value={accountValues.role ? accountValues.role : 'Employee'}
+                  disabled={!roleEdit && !editable ? true : false}
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {accountTypes.map((option) => (

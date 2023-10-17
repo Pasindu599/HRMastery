@@ -7,16 +7,16 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { AccountProfile } from '../Profile/components/account-profile';
-import { AccountProfileDetails } from '../Profile/components/account-profile-details';
+import { OtherAccountProfileDetails } from '../Profile/components/other-account-profile';
 import Button from '@mui/material/Button';
 import { colors } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function EditProfile(children) {
+function OtherProfile(children) {
   const navigate = useNavigate();
-  const { role, id } = useParams();
+  const { role, id, otherid, other } = useParams();
   console.log('role', role, 'id', id);
 
   const location = useLocation();
@@ -25,6 +25,8 @@ function EditProfile(children) {
 
   const [edit, setEdit] = useState(false);
   const [editButton, setEditButton] = useState(false);
+  const [roleEdit, setRoleEdit] = useState(true);
+
   const [accountTypes, setAccountTypes] = useState([
     {
       value: 'Admin',
@@ -52,6 +54,34 @@ function EditProfile(children) {
   const handleEdit = () => {
     setEdit(true);
     setEditButton(false);
+    console.log('role', role, 'other', other);
+    if (role === other) {
+      setRoleEdit(false);
+    } else if (role === 'Admin') {
+      setRoleEdit(true);
+      setAccountTypes([
+        {
+          value: 'HR',
+          label: 'HR Manager',
+        },
+        {
+          value: 'Employee',
+          label: 'Employee',
+        },
+      ]);
+    } else if (role === 'HR' && other === 'Admin') {
+      setRoleEdit(false);
+    } else if (role === 'HR' && (other === 'Employee' || other === 'Null')) {
+      setRoleEdit(true);
+      setAccountTypes([
+        {
+          value: 'Employee',
+          label: 'Employee',
+        },
+      ]);
+    } else if (role === 'Employee') {
+      setRoleEdit(false);
+    }
   };
 
   return (
@@ -106,10 +136,10 @@ function EditProfile(children) {
                     </Grid>
                     <Grid xs={10} md={0.5} lg={0.5}></Grid>
                     <Grid xs={12} md={8} lg={8}>
-                      <AccountProfileDetails
+                      <OtherAccountProfileDetails
                         editable={edit}
                         accountTypes={accountTypes}
-                      ></AccountProfileDetails>
+                      ></OtherAccountProfileDetails>
                     </Grid>
                   </Grid>
                 </div>
@@ -122,4 +152,4 @@ function EditProfile(children) {
   );
 }
 
-export default EditProfile;
+export default OtherProfile;
