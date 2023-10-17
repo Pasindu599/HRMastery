@@ -1,5 +1,3 @@
-USE `hrm`;
-DROP function IF EXISTS `get_total_leaving_count`;
 
 USE `hrm`;
 DROP function IF EXISTS `hrm`.`get_total_leaving_count`;
@@ -7,7 +5,7 @@ DROP function IF EXISTS `hrm`.`get_total_leaving_count`;
 
 DELIMITER $$
 USE `hrm`$$
-CREATE DEFINER=`root`@`localhost` FUNCTION `get_total_leaving_count`( dept_id int) RETURNS int
+CREATE FUNCTION `get_total_leaving_count`( dept_id int) RETURNS int
     READS SQL DATA
 BEGIN
 	DECLARE total_leaving_count int;
@@ -18,7 +16,7 @@ RETURN total_leaving_count;
 END$$
 
 DELIMITER ;
-;
+
 
 
 DELIMITER //
