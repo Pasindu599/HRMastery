@@ -1,8 +1,8 @@
 use hrm;
 -- departments
-INSERT INTO `departments` (`name`) VALUES ('Men\'s Wear');
-INSERT INTO `departments` (`name`) VALUES ('Women\'s Wear');
-INSERT INTO `departments` (`name`) VALUES ('Kid\'s Wear');
+INSERT INTO `departments` (`name`) VALUES ('Human Resource');
+INSERT INTO `departments` (`name`) VALUES ('Finance and Accounting');
+INSERT INTO `departments` (`name`) VALUES ('Operations');
 
 -- job titles
 INSERT INTO `job_titles` (`job_title`) VALUES ('HR Manager');
@@ -84,7 +84,7 @@ VALUES
 -- user accounts
 INSERT INTO `HRM`.`user_accounts` (`username`, `password`, `user_email`, `employee_id`, `role_id`)
 VALUES 
-('ChamariFernando', 'password123', 'chamari.fernando@gmail.com', 'A0001', 1),
+('ChamariFernando', '$2a$12$1vtCLCvEqLBU4qd7QadcLOMoYnTz7A2pNncXYp.Hr/Puq3YVe/IsK', 'chamari.fernando@gmail.com', 'A0001', 1),
 ('DinukaPerera', 'password123', 'dinuka.perera@gmail.com', 'A0002', 2),
 ('IsuriSilva', 'password123', 'isuri.silva@gmail.com', 'A0003', 3),
 ('JanithKarunaratne', 'password123', 'janith.karunaratne@gmail.com', 'A0004', 3),
