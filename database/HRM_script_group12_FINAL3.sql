@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `HRM`.`leave_requests` (
   `request_id` INT NOT NULL AUTO_INCREMENT,
   `reason` TEXT NOT NULL,
   `leave_day_count` INT NOT NULL,
-  `request_date` DATETIME NOT NULL,
+  `request_date` DATE NOT NULL,
   `approved` TINYINT NOT NULL,
   `employee_id` CHAR(5) NOT NULL,
   `leave_type_id` INT NOT NULL,
