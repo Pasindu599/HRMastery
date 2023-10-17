@@ -42,3 +42,17 @@ CREATE  OR REPLACE VIEW `hrm`.`employee_without_custom_attributes` AS
 
     FROM
         `hrm`.`employees`;
+
+
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = root@localhost 
+    SQL SECURITY DEFINER
+VIEW hrm.profile_view AS
+    SELECT 
+        hrm.employees.employee_id AS employee_id,
+        hrm.employees.first_name AS first_name,
+        hrm.employees.last_name AS last_name
+    FROM
+        hrm.employees
+
