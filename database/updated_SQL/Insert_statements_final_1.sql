@@ -123,16 +123,16 @@ VALUES
 INSERT INTO `HRM`.`leave_requests` 
 (`reason`, `leave_day_count`, `request_date`, `approved`, `employee_id`, `leave_type_id`) 
 VALUES 
-('Family event', 3, '2023-01-01 09:00:00', 1, 'A0001', 1),
-('Medical leave', 2, '2023-01-05 10:30:00', 0, 'A0002', 2),
-('Vacation', 5, '2023-01-10 14:15:00', 1, 'A0003', 3),
-('Maternity leave', 60, '2023-01-20 16:20:00', 1, 'A0019', 3),
-('Family event', 1, '2023-01-25 11:05:00', 0, 'A0005', 1),
-('Medical leave', 4, '2023-01-30 12:10:00', 1, 'A0006', 2),
-('Vacation', 7, '2023-02-05 13:30:00', 0, 'A0007', 3),
-('Medical leave', 3, '2023-02-10 10:00:00', 1, 'A0008', 2),
-('Family event', 2, '2023-02-15 15:40:00', 0, 'A0009', 1),
-('Vacation', 10, '2023-02-20 11:50:00', 1, 'A0010', 3);
+('Family event', 3, '2023-01-01', 1, 'A0001', 1),
+('Medical leave', 2, '2023-01-05', 0, 'A0002', 2),
+('Vacation', 5, '2023-01-10', 1, 'A0003', 3),
+('Maternity leave', 60, '2023-01-20', 1, 'A0019', 3),
+('Family event', 1, '2023-01-25', 0, 'A0005', 1),
+('Medical leave', 4, '2023-01-30', 1, 'A0006', 2),
+('Vacation', 7, '2023-02-05', 0, 'A0007', 3),
+('Medical leave', 3, '2023-02-10', 1, 'A0008', 2),
+('Family event', 2, '2023-02-15', 0, 'A0009', 1),
+('Vacation', 10, '2023-02-20', 1, 'A0010', 3);
 
 -- dependents
 INSERT INTO `HRM`.`dependents` (`employee_id`, `dependent_name`, `relationship`, `age`) VALUES
