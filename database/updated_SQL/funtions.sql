@@ -20,3 +20,19 @@ END$$
 DELIMITER ;
 ;
 
+
+DELIMITER //
+CREATE FUNCTION Check_enough_remaianing_leaves(requested_no_of_leaves INT, employee_id CHAR(5), leave_type_id INT )
+RETURNS integer
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+ DECLARE available_days integer;
+ SELECT remaining_days INTO available_days FROM remaining_leaving_days WHERE remaining_leaving_days.leave_type_id=leave_type_id AND remaining_leaving_days.employee_id=employee_id;
+ IF requested_no_of_leaves > available_days THEN 
+	RETURN 0;
+ ELSE
+	RETURN 1;
+ END IF;
+END //
+DELIMITER ;
