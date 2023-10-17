@@ -84,7 +84,6 @@ CREATE TABLE IF NOT EXISTS `HRM`.`employees` (
   `pay_grade_id` INT NOT NULL,
   `employee_status_id` INT NOT NULL,
   `job_title_id` INT NOT NULL,
-  `dependent_id` CHAR(5) NOT NULL,
   PRIMARY KEY (`employee_id`),
   INDEX `fk_employees_departments1_idx` (`department_id` ASC) VISIBLE,
   INDEX `fk_employees_pay_grades1_idx` (`pay_grade_id` ASC) VISIBLE,
@@ -199,7 +198,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `HRM`.`user_accounts` ;
 
 CREATE TABLE IF NOT EXISTS `HRM`.`user_accounts` (
-  `user_id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` CHAR(5) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   `user_email` VARCHAR(45) NOT NULL,
@@ -427,6 +426,27 @@ BEGIN
 	END iF;
     
     SET NEW.dependent_id=CONCAT('D',LPAD(max_val+1,4,'0'));
+END;
+//
+DELIMITER ;
+
+-- trigger for auto incrementing user_id
+
+DROP TRIGGER IF EXISTS user_id_trigger;
+DELIMITER //
+CREATE TRIGGER user_id_trigger 
+BEFORE INSERT
+ON hrm.user_accounts
+FOR EACH ROW 
+BEGIN
+	DECLARE max_val INT;
+    SET max_val=(SELECT MAX(CAST(substring(user_id,2) AS SIGNED))
+				 FROM user_accounts);
+	IF max_val IS NULL THEN 
+		SET max_val=0;
+	END iF;
+    
+    SET NEW.user_id=CONCAT('U',LPAD(max_val+1,4,'0'));
 END;
 //
 DELIMITER ;
