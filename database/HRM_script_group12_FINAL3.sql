@@ -84,6 +84,7 @@ CREATE TABLE IF NOT EXISTS `HRM`.`employees` (
   `pay_grade_id` INT NOT NULL,
   `employee_status_id` INT NOT NULL,
   `job_title_id` INT NOT NULL,
+  `dependent_id` CHAR(5) NOT NULL,
   PRIMARY KEY (`employee_id`),
   INDEX `fk_employees_departments1_idx` (`department_id` ASC) VISIBLE,
   INDEX `fk_employees_pay_grades1_idx` (`pay_grade_id` ASC) VISIBLE,
@@ -131,7 +132,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `HRM`.`leave_requests` ;
 
 CREATE TABLE IF NOT EXISTS `HRM`.`leave_requests` (
-  `request_id` INT NOT NULL AUTO_INCREMENT,
+  `request_id` CHAR(5) NOT NULL,
   `reason` TEXT NOT NULL,
   `leave_day_count` INT NOT NULL,
   `request_date` DATE NOT NULL,
@@ -273,7 +274,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `HRM`.`dependents` ;
 
 CREATE TABLE IF NOT EXISTS `HRM`.`dependents` (
-  `dependent_id` INT NOT NULL AUTO_INCREMENT,
+  `dependent_id` CHAR(5) NOT NULL,
   `employee_id` CHAR(5) NOT NULL,
   `dependent_name` VARCHAR(45) NOT NULL,
   `relationship` VARCHAR(45) NOT NULL,
@@ -387,5 +388,46 @@ END;
 //
 DELIMITER ;
 
+-- trigger for auto incrementing leave request_id
 
+DROP TRIGGER IF EXISTS request_id_trigger;
+DELIMITER //
+CREATE TRIGGER request_id_trigger 
+BEFORE INSERT
+ON hrm.leave_requests
+FOR EACH ROW 
+BEGIN
+	DECLARE max_val INT;
+    SET max_val=(SELECT MAX(CAST(substring(request_id,2) AS SIGNED))
+				 FROM leave_requests);
+	IF max_val IS NULL THEN 
+		SET max_val=0;
+	END iF;
+    
+    SET NEW.request_id=CONCAT('L',LPAD(max_val+1,4,'0'));
+END;
+//
+DELIMITER ;
+
+
+-- trigger for auto incrementing dependent_id
+
+DROP TRIGGER IF EXISTS dependent_id_trigger;
+DELIMITER //
+CREATE TRIGGER dependent_id_trigger 
+BEFORE INSERT
+ON hrm.dependents
+FOR EACH ROW 
+BEGIN
+	DECLARE max_val INT;
+    SET max_val=(SELECT MAX(CAST(substring(dependent_id,2) AS SIGNED))
+				 FROM dependents);
+	IF max_val IS NULL THEN 
+		SET max_val=0;
+	END iF;
+    
+    SET NEW.dependent_id=CONCAT('D',LPAD(max_val+1,4,'0'));
+END;
+//
+DELIMITER ;
 
