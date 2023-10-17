@@ -85,15 +85,15 @@ VALUES
 INSERT INTO `HRM`.`user_accounts` (`username`, `password`, `user_email`, `employee_id`, `role_id`)
 VALUES 
 ('ChamariFernando', '$2a$12$1vtCLCvEqLBU4qd7QadcLOMoYnTz7A2pNncXYp.Hr/Puq3YVe/IsK', 'chamari.fernando@gmail.com', 'A0001', 1),
-('DinukaPerera', 'password123', 'dinuka.perera@gmail.com', 'A0002', 2),
-('IsuriSilva', 'password123', 'isuri.silva@gmail.com', 'A0003', 3),
-('JanithKarunaratne', 'password123', 'janith.karunaratne@gmail.com', 'A0004', 3),
-('NethmiRatnayake', 'password123', 'nethmi.ratnayake@gmail.com', 'A0005', 3),
-('PasanJayawardena', 'password123', 'pasan.jayawardena@gmail.com', 'A0006', 3),
-('DimalshaWijeratne', 'password123', 'dimalsha.wijeratne@gmail.com', 'A0007', 3),
-('SahanBandara', 'password123', 'sahan.bandara@gmail.com', 'A0008', 3),
-('SanduniPerera', 'password123', 'sanduni.perera@gmail.com', 'A0009', 3),
-('LahiruDissanayake', 'password123', 'lahiru.dissanayake@gmail.com', 'A0010', 3);
+('DinukaPerera', '$2a$12$1vtCLCvEqLBU4qd7QadcLOMoYnTz7A2pNncXYp.Hr/Puq3YVe/IsK', 'dinuka.perera@gmail.com', 'A0002', 2),
+('IsuriSilva', '$2a$12$1vtCLCvEqLBU4qd7QadcLOMoYnTz7A2pNncXYp.Hr/Puq3YVe/IsK', 'isuri.silva@gmail.com', 'A0003', 3),
+('JanithKarunaratne', '$2a$12$1vtCLCvEqLBU4qd7QadcLOMoYnTz7A2pNncXYp.Hr/Puq3YVe/IsK', 'janith.karunaratne@gmail.com', 'A0004', 3),
+('NethmiRatnayake', '$2a$12$1vtCLCvEqLBU4qd7QadcLOMoYnTz7A2pNncXYp.Hr/Puq3YVe/IsK', 'nethmi.ratnayake@gmail.com', 'A0005', 3),
+('PasanJayawardena', '$2a$12$1vtCLCvEqLBU4qd7QadcLOMoYnTz7A2pNncXYp.Hr/Puq3YVe/IsK', 'pasan.jayawardena@gmail.com', 'A0006', 3),
+('DimalshaWijeratne','$2a$12$1vtCLCvEqLBU4qd7QadcLOMoYnTz7A2pNncXYp.Hr/Puq3YVe/IsK', 'dimalsha.wijeratne@gmail.com', 'A0007', 3),
+('SahanBandara', '$2a$12$1vtCLCvEqLBU4qd7QadcLOMoYnTz7A2pNncXYp.Hr/Puq3YVe/IsK', 'sahan.bandara@gmail.com', 'A0008', 3),
+('SanduniPerera', '$2a$12$1vtCLCvEqLBU4qd7QadcLOMoYnTz7A2pNncXYp.Hr/Puq3YVe/IsK', 'sanduni.perera@gmail.com', 'A0009', 3),
+('LahiruDissanayake','$2a$12$1vtCLCvEqLBU4qd7QadcLOMoYnTz7A2pNncXYp.Hr/Puq3YVe/IsK', 'lahiru.dissanayake@gmail.com', 'A0010', 3);
 
 -- emergency contact details
 INSERT INTO `HRM`.`emergency_contact_details` (`contact_name`, `relationship`, `contact_number`, `employee_id`)
