@@ -1,7 +1,7 @@
 export const COLUMNS = [
   {
     Headers: 'Id',
-    accessor: 'id',
+    accessor: 'employee_id',
   },
   {
     Headers: 'First Name',
@@ -13,10 +13,10 @@ export const COLUMNS = [
   },
   {
     Headers: 'Email',
-    accessor: 'email',
+    accessor: 'user_email',
   },
   {
     Headers: 'Phone Number',
-    accessor: 'phone_number',
+    accessor: 'contact_number',
   },
 ];

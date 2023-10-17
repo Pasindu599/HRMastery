@@ -27,7 +27,7 @@ import { createTheme } from '@mui/material/styles';
 import { purple, lime } from '@mui/material/colors';
 import { makeStyles } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const drawerWidth = 300;
 
@@ -48,6 +48,7 @@ const theme = createTheme({
 });
 
 export default function SideDrawer(props) {
+  const { role, id } = useParams();
   const navigate = useNavigate();
   const [drawerBackground, setDrawerBackground] = React.useState('#B514EE'); // Initialize background color
 
@@ -134,7 +135,15 @@ export default function SideDrawer(props) {
                   <ListItemIcon>
                     <StarBorder />
                   </ListItemIcon>
-                  <ListItemText primary="All Employees" />
+                  <ListItemText
+                    primary="All Employees"
+                    onClick={() => {
+                      // go and refresh the page
+                      navigate('/all-employee/' + role + '/' + id + '/', {
+                        replace: true,
+                      });
+                    }}
+                  />
                 </ListItemButton>
                 <ListItemButton sx={{ pl: 10 }}>
                   <ListItemIcon>

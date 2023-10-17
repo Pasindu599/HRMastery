@@ -5,10 +5,14 @@ app.use(cors());
 app.use(express.json());
 
 const db = require('./database'),
-  employeeRoutes = require('./user');
+  userRoutes = require('./user');
+employeeRoutes = require('./employee');
+branchRoutes = require('./branch');
 
 // middleware
-app.use('/api/', employeeRoutes);
+app.use('/api/', userRoutes);
+app.use('/emp/', employeeRoutes);
+app.use('/branch/', branchRoutes);
 
 db.query('SELECT 1')
   .then(() => {
