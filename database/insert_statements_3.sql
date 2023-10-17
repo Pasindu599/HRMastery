@@ -59,9 +59,9 @@ VALUES
 -- employees
 INSERT INTO `employees` (`first_name`, `last_name`, `gender`, `birthdate`,`marital_status`, `supervisor_id`, `department_id`, `pay_grade_id`, `employee_status_id`, `job_title_id`)
 VALUES
-('Chamari', 'Fernando', 'female', '1989-05-07', 1, 'A0002', 2, 3, 4, 2),
-('Dinuka', 'Perera', 'male', '1990-11-15', 0, 'A0001', 3, 1, 5, 1),
-('Isuri', 'Silva', 'female', '1986-04-20', 1, 'A0002', 1, 2, 2, 1),
+('Chamari', 'Fernando', 'female', '1989-05-07', 1, 'A0002', 1, 3, 4, 2),
+('Dinuka', 'Perera', 'male', '1990-11-15', 0, 'A0001', 1, 1, 5, 1),
+('Isuri', 'Silva', 'female', '1986-04-20', 1, 'A0002', 2, 2, 2, 1),
 ('Janith', 'Karunaratne', 'male', '1992-03-03', 0, 'A0002', 3, 4, 5, 2),
 ('Nethmi', 'Ratnayake', 'female', '1993-08-18', 1, 'A0002', 1, 2, 1, 3),
 ('Pasan', 'Jayawardena', 'male', '1987-12-29', 0, 'A0003', 2, 1, 5, 3),
