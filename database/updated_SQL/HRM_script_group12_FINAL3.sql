@@ -185,7 +185,7 @@ DROP TABLE IF EXISTS `HRM`.`user_accounts` ;
 CREATE TABLE IF NOT EXISTS `HRM`.`user_accounts` (
   `user_id` CHAR(5) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(75) NOT NULL,
   `user_email` VARCHAR(45) NOT NULL,
   `employee_id` CHAR(5) NOT NULL,
   `role_id` INT NOT NULL,
