@@ -24,3 +24,21 @@ CREATE
     FROM
         (`hrm`.`employees` `e`
         LEFT JOIN `hrm`.`employees` `s` ON ((`e`.`supervisor_id` = `s`.`employee_id`)));
+
+
+CREATE  OR REPLACE VIEW `hrm`.`employee_without_custom_attributes` AS
+    SELECT 
+        `hrm`.`employees`.`employee_id` AS `employee_id`,
+        `hrm`.`employees`.`first_name` AS `first_name`,
+        `hrm`.`employees`.`last_name` AS `last_name`,
+        `hrm`.`employees`.`gender` AS `gender`,
+        `hrm`.`employees`.`birthdate` AS `birthdate`,
+        `hrm`.`employees`.`marital_status` AS `marital_status`,
+        `hrm`.`employees`.`supervisor_id` AS `supervisor_id`,
+        `hrm`.`employees`.`department_id` AS `department_id`,
+        `hrm`.`employees`.`pay_grade_id` AS `pay_grade_id`,
+		`hrm`.`employees`.`employee_status_id` AS `employee_status_id`,
+		`hrm`.`employees`.`job_title_id` AS `job_title_id`
+
+    FROM
+        `hrm`.`employees`;
