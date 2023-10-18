@@ -234,7 +234,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `HRM`.`emergency_contact_details` ;
 
 CREATE TABLE IF NOT EXISTS `HRM`.`emergency_contact_details` (
-  `emergency_contact_id` INT NOT NULL AUTO_INCREMENT,
+  `emergency_contact_id` CHAR(5) NOT NULL ,
   `contact_name` VARCHAR(45) NOT NULL,
   `relationship` VARCHAR(45) NOT NULL,
   `contact_number` VARCHAR(45) NOT NULL,
@@ -428,6 +428,31 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+-- trigger for auto incrementing emergency_contact_id 
+
+DROP TRIGGER IF EXISTS emergency_contact_id_trigger;
+DELIMITER //
+CREATE TRIGGER emergency_contact_id_trigger 
+BEFORE INSERT
+ON hrm.emergency_contact_details
+FOR EACH ROW 
+BEGIN
+    DECLARE max_val INT;
+    SET max_val=(SELECT MAX(CAST(substring(emergency_contact_id,2) AS SIGNED))
+				 FROM emergency_contact_details);
+	IF max_val IS NULL THEN 
+		SET max_val=0;
+	END iF;
+    
+    SET NEW.emergency_contact_id=CONCAT('E',LPAD(max_val+1,4,'0'));
+END;
+//
+DELIMITER ;
+
+
+
+
 
 use hrm;
 -- departments
