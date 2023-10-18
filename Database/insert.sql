@@ -182,4 +182,4 @@ INSERT INTO `HRM`.`dependents` (`employee_id`, `dependent_name`, `relationship`,
 
 insert into leave_requests
 (`reason`, `leave_day_count`, `request_date`, `approved`, `employee_id`, `leave_type_id`) 
-values ('Maternity leave', 70, '2023-01-20 16:20:00', 1, 'A0019', 3);
+values ('Maternity leave', 70, '2023-01-20 16:20:00', 1, 'A0019', 3),('Maternity leave', 60, '2023-01-20 ', 1, 'A0019', 3);
