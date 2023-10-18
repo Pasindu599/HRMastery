@@ -587,7 +587,8 @@ VALUES
 ('Medical leave', 4, '2023-01-30', 1, 'A0006', 2),
 ('Vacation', 7, '2023-02-05', 0, 'A0007', 2),
 ('Medical leave', 3, '2023-02-10', 1, 'A0008', 2),
-('Family event', 2, '2023-02-15', 0, 'A0009', 1);
+('Family event', 2, '2023-02-15', 0, 'A0009', 1),
+('Maternity leave', 70, '2023-01-20', 1, 'A0019', 3);
 
 
 -- dependents
@@ -636,9 +637,6 @@ INSERT INTO `HRM`.`dependents` (`employee_id`, `dependent_name`, `relationship`,
 ('A0021', 'Yumal', 'Son', 12);
 
 
-insert into leave_requests
-(`reason`, `leave_day_count`, `leave_start_date`, `approved`, `employee_id`, `leave_type_id`) 
-values ('Maternity leave', 70, '2023-01-20 ', 1, 'A0019', 3);
 
 
 
