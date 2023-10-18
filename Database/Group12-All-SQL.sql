@@ -1,4 +1,3 @@
--- MySQL Workbench Forward Engineering
 
 -- -----------------------------------------------------
 -- Schema HRM
