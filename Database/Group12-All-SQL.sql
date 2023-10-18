@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `HRM`.`leave_requests` (
   `request_id` CHAR(5) NOT NULL,
   `reason` TEXT NOT NULL,
   `leave_day_count` INT NOT NULL,
-  `request_date` DATE NOT NULL,
+  `leave_start_date` DATE NOT NULL,
   `approved` TINYINT NOT NULL,
   `employee_id` CHAR(5) NOT NULL,
   `leave_type_id` INT NOT NULL,
@@ -578,7 +578,7 @@ VALUES
 
 -- leave requests
 INSERT INTO `HRM`.`leave_requests` 
-(`reason`, `leave_day_count`, `request_date`, `approved`, `employee_id`, `leave_type_id`) 
+(`reason`, `leave_day_count`, `leave_start_date`, `approved`, `employee_id`, `leave_type_id`) 
 VALUES 
 ('Family event', 3, '2023-01-01', 1, 'A0001', 1),
 ('Medical leave', 2, '2023-01-05', 0, 'A0002', 2),
@@ -637,8 +637,8 @@ INSERT INTO `HRM`.`dependents` (`employee_id`, `dependent_name`, `relationship`,
 
 
 insert into leave_requests
-(`reason`, `leave_day_count`, `request_date`, `approved`, `employee_id`, `leave_type_id`) 
-values ('Maternity leave', 70, '2023-01-20 16:20:00', 1, 'A0019', 3);
+(`reason`, `leave_day_count`, `leave_start_date`, `approved`, `employee_id`, `leave_type_id`) 
+values ('Maternity leave', 70, '2023-01-20 ', 1, 'A0019', 3);
 
 
 
@@ -696,7 +696,7 @@ CREATE  OR REPLACE VIEW `hrm`.`all_accept_leavings` AS
         `hrm`.`leave_requests`.`request_id` AS `request_id`,
         `hrm`.`leave_requests`.`reason` AS `reason`,
         `hrm`.`leave_requests`.`leave_day_count` AS `leave_day_count`,
-        `hrm`.`leave_requests`.`request_date` AS `request_date`,
+        `hrm`.`leave_requests`.`leave_start_date` AS `leave_start_date`,
         `hrm`.`leave_requests`.`approved` AS `approved`,
         `hrm`.`leave_requests`.`employee_id` AS `employee_id`,
         `hrm`.`leave_requests`.`leave_type_id` AS `leave_type_id`
