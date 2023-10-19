@@ -138,7 +138,6 @@ function OtherProfile(children) {
                     <Grid xs={12} md={8} lg={8}>
                       <OtherAccountProfileDetails
                         editable={edit}
-                        accountTypes={accountTypes}
                       ></OtherAccountProfileDetails>
                     </Grid>
                   </Grid>

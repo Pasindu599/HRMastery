@@ -60,9 +60,122 @@ const defaultLableNames = [
 
 export const OtherAccountProfileDetails = (props) => {
   const { role, id, otherid, other } = useParams();
-  const { editable, accountTypes, roleEdit } = props;
+  const { editable } = props;
   console.log('OtherAccountProfileDetails');
   console.log(role, id, otherid, other);
+
+  const pay_grade = [
+    {
+      value: 1,
+      label: 'Level 1',
+    },
+    {
+      value: 2,
+      label: 'Level 2',
+    },
+    {
+      value: 3,
+      label: 'Level 3',
+    },
+    {
+      value: 4,
+      label: 'Level 4',
+    },
+  ];
+
+  const employment_statuses = [
+    {
+      value: 1,
+      label: 'Intern - full time',
+    },
+    {
+      value: 2,
+      label: 'Intern - part time',
+    },
+    {
+      value: 3,
+      label: 'Contract - full time',
+    },
+    {
+      value: 4,
+      label: 'Contract - part time',
+    },
+    {
+      value: 5,
+      label: 'Permanent',
+    },
+    {
+      value: 6,
+      label: 'Freelance',
+    },
+  ];
+
+  const job_title = [
+    {
+      value: 1,
+      label: 'HR Manager',
+    },
+    {
+      value: 2,
+      label: 'Accountant',
+    },
+    {
+      value: 3,
+      label: 'Software Engineer',
+    },
+    {
+      value: 4,
+      label: 'Project Manager',
+    },
+  ];
+
+  const deparments = [
+    {
+      value: 1,
+      label: 'Human Resource',
+    },
+    {
+      value: 2,
+      label: 'Finance and Accounting',
+    },
+    {
+      value: 3,
+      label: 'Operations',
+    },
+  ];
+  // const accountTypes = [
+  //   {
+  //     value: 'Admin',
+  //     label: 'Admin',
+  //   },
+  //   {
+  //     value: 'HR',
+  //     label: 'HR Manager',
+  //   },
+  //   {
+  //     value: 'Employee',
+  //     label: 'Employee',
+  //   },
+  // ];
+  const accountTypes = [
+    {
+      value: '',
+      label: '',
+    },
+    {
+      value: 1,
+      label: 'Admin',
+    },
+    {
+      value: 2,
+      label: 'HR Manager',
+    },
+    {
+      value: 3,
+      label: 'Employee',
+    },
+  ];
+
   const [lableNames, setLableNames] = useState([]);
   const [customAttributes, setCustomAttributes] = useState({});
 
@@ -79,7 +192,7 @@ export const OtherAccountProfileDetails = (props) => {
     gender: '',
     maritalStatus: '',
     supervisorId: '',
-    payGradeId: '',
+    payGrade: '',
     employeeStatusId: '',
     jobTitleId: '',
   });
@@ -100,126 +213,62 @@ export const OtherAccountProfileDetails = (props) => {
   });
 
   useEffect(() => {
-    console.log('AccountProfileDetails');
-    axios
-      .get('http://localhost:8000/emp/employee/details/')
-      .then((response) => {
-        const fieldNames = [];
-        for (const item of response.data.data) {
-          fieldNames.push(item.Field);
-        }
-        setLableNames(fieldNames);
-        console.log(fieldNames);
-        // const customAttributeValues = {};
-        // for (const item of fieldNames) {
-        //   if (!defaultLableNames.includes(item)) {
-        //     console.log('item');
-        //     console.log(item);
-        //     customAttributeValues[item] = '';
-        //   }
-        // }
-
-        // setCustomAttributes(customAttributeValues);
-        // console.log('customAttributeValues');
-        // console.log(customAttributeValues);
-      })
-
-      .catch((error) => {
-        console.log(error);
-      });
-    //check is there any lable name not in default lable names
-
-    axios
-      .get(`http://localhost:8000/emp/employee/details/${otherid}`)
-      .then((response) => {
-        console.log(response.data.data[0]);
-        setAllDetails(response.data.data[0]);
-        setValues({
-          firstName: response.data.data[0].first_name,
-          lastName: response.data.data[0].last_name,
-          gender: response.data.data[0].gender,
-          maritalStatus: response.data.data[0].marital_status,
-          supervisorId: response.data.data[0].supervisor_id,
-          payGradeId: response.data.data[0].pay_grade_id,
-          employeeStatusId: response.data.data[0].employee_status_id,
-          jobTitleId: response.data.data[0].job_title_id,
+    async function fetchData() {
+      await axios
+        .get(`http://localhost:8000/emp/employee/custom-attributes/${otherid}`)
+        .then((response) => {
+          setCustomAttributes(response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
         });
-        setBirthday(dayjs(response.data.data[0].birthdate));
-        setContactValues({
-          contact_name: response.data.data[0].contact_name,
-          relationship: response.data.data[0].relationship,
-          phoneNumber: response.data.data[0].contact_number,
+
+      await axios
+        .get(`http://localhost:8000/emp/employee/details/${otherid}`)
+        .then((response) => {
+          console.log(response.data.data[0]);
+          setAllDetails(response.data.data[0]);
+          setValues({
+            firstName: response.data.data[0].first_name,
+            lastName: response.data.data[0].last_name,
+            gender: response.data.data[0].gender,
+            maritalStatus: response.data.data[0].marital_status,
+            supervisorId: response.data.data[0].supervisor_id,
+            payGrade: response.data.data[0].pay_grade_id,
+            employeeStatusId: response.data.data[0].employee_status_id,
+            jobTitleId: response.data.data[0].job_title_id,
+          });
+          setBirthday(dayjs(response.data.data[0].birthdate));
+          setContactValues({
+            contact_name: response.data.data[0].contact_name,
+            relationship: response.data.data[0].relationship,
+            phoneNumber: response.data.data[0].contact_number,
+          });
+          setDepartmentValues({
+            departmentName: response.data.data[0].department_id,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
         });
-        setDepartmentValues({
-          departmentName: response.data.data[0].name,
+
+      await axios
+        .get(`http://localhost:8000/emp/employee/account/${otherid}`)
+        .then((response) => {
+          console.log(response.data.data[0]);
+          setAccountValues({
+            username: response.data.data[0].username,
+            password: response.data.data[0].password,
+            email: response.data.data[0].user_email,
+            role: response.data.data[0].role_id,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
         });
-        // setAccountValues({
-        //   username: response.data.data[0].username,
-        //   password: response.data.data[0].password,
-        //   email: response.data.data[0].email,
-        //   role: response.data.data[0].role,
-        // });
-        const customAttributeValues = {};
-        for (const item of lableNames) {
-          if (!defaultLableNames.includes(item)) {
-            console.log('item');
-            console.log(item);
-            customAttributeValues[item] = response.data.data[0][item];
-          }
-        }
+    }
 
-        setCustomAttributes(customAttributeValues);
-        console.log('customAttribute');
-        console.log(customAttributes);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    axios
-      .get(`http://localhost:8000/emp/employee/account/${otherid}`)
-      .then((response) => {
-        console.log(response.data.data[0]);
-        setAccountValues({
-          username: response.data.data[0].username,
-          password: response.data.data[0].password,
-          email: response.data.data[0].user_email,
-          role: response.data.data[0].role,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    axios.get('http://localhost:8000/branch/deparments/').then((response) => {
-      console.log(response.data.data);
-      setAllDepartments(response.data.data);
-    });
-
-    axios.get('http://localhost:8000/branch/pay-grades/').then((response) => {
-      console.log(response.data.data);
-      setAllPayGrades(response.data.data);
-    });
-
-    axios
-      .get('http://localhost:8000/branch/employee-status/')
-      .then((response) => {
-        console.log(response.data.data);
-        setAllEmployeeStatus(response.data.data);
-      });
-
-    axios.get('http://localhost:8000/branch/job-titles/').then((response) => {
-      console.log(response.data.data);
-      setAllJobTitles(response.data.data);
-      if (role === 'Employee' || role === 'HR') {
-        setAllJobTitles(
-          response.data.data.filter(
-            (item) =>
-              item.job_title === 'HR Manager' || item.job_title === 'Admin'
-          )
-        );
-      }
-    });
+    fetchData();
   }, []);
 
   const handleChange = useCallback((event) => {
@@ -234,6 +283,7 @@ export const OtherAccountProfileDetails = (props) => {
       ...prevState,
       [event.target.name]: event.target.value,
     }));
+    console.log(accountValues);
   }, []);
 
   const handleChangeContactDeatils = useCallback((event) => {
@@ -256,6 +306,40 @@ export const OtherAccountProfileDetails = (props) => {
       [event.target.name]: event.target.value,
     }));
   }, []);
+
+  const handleSave = (e) => {
+    e.preventDefault();
+
+    const data = {
+      ...accountValues,
+      ...contactValues,
+      ...DepartmentValues,
+
+      ...customAttributes,
+      ...values,
+
+      birthdate: birthday.format('YYYY-MM-DD'),
+      customAttributes: customAttributes,
+    };
+    console.log(data);
+
+    axios
+      .post(`http://localhost:8000/emp/employee/update/${otherid}`, data)
+      .then((res) => {
+        console.log(res);
+        if (res.data.Status === true) {
+          console.log(res);
+          alert('Employee Added Successfully');
+          window.location.reload();
+        } else {
+          alert('Error in Adding Employee');
+        }
+      })
+      .catch((err) => {
+        console.log('mmkms');
+        console.log(err);
+      });
+  };
 
   return (
     <form autoComplete="off" noValidate>
@@ -284,7 +368,7 @@ export const OtherAccountProfileDetails = (props) => {
                   onChange={handleChange}
                   required
                   value={values.firstName}
-                  disabled={!editable}
+                  disabled={true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -296,7 +380,7 @@ export const OtherAccountProfileDetails = (props) => {
                   onChange={handleChange}
                   required
                   value={values.lastName}
-                  disabled={!editable}
+                  disabled={true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -311,7 +395,7 @@ export const OtherAccountProfileDetails = (props) => {
                       value={birthday}
                       onChange={(newValue) => setBirthday(newValue)}
                       sx={{ width: '100%' }}
-                      disabled={!editable}
+                      disabled={true}
                       className={editable ? '' : 'disabled-text-field'}
                     />
                   </DemoContainer>
@@ -327,7 +411,7 @@ export const OtherAccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={values.gender}
-                  disabled={!editable}
+                  disabled={true}
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {gender.map((option) => (
@@ -347,7 +431,7 @@ export const OtherAccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={values.maritalStatus}
-                  disabled={!editable}
+                  disabled={true}
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {maritalStatus.map((option) => (
@@ -365,7 +449,7 @@ export const OtherAccountProfileDetails = (props) => {
                   onChange={handleChange}
                   required
                   value={values.supervisorId}
-                  disabled={!editable}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -378,16 +462,13 @@ export const OtherAccountProfileDetails = (props) => {
                   required
                   select
                   SelectProps={{ native: true }}
-                  value={values.payGradeId}
-                  disabled={!editable}
+                  value={values.payGrade}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 >
-                  {allPayGrades.map((option) => (
-                    <option
-                      key={option.pay_grade_id}
-                      value={option.pay_grade_id}
-                    >
-                      {option.pay_grade}
+                  {pay_grade.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
                     </option>
                   ))}
                 </TextField>
@@ -402,15 +483,12 @@ export const OtherAccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={values.employeeStatusId}
-                  disabled={!editable}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 >
-                  {allEmployeeStatus.map((option) => (
-                    <option
-                      key={option.employee_status_id}
-                      value={option.employee_status_id}
-                    >
-                      {option.status}
+                  {employment_statuses.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
                     </option>
                   ))}
                 </TextField>
@@ -426,15 +504,12 @@ export const OtherAccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={values.jobTitleId}
-                  disabled={!editable}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 >
-                  {allJobTitles.map((option) => (
-                    <option
-                      key={option.job_title_id}
-                      value={option.job_title_id}
-                    >
-                      {option.job_title}
+                  {job_title.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
                     </option>
                   ))}
                 </TextField>
@@ -486,7 +561,7 @@ export const OtherAccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.contact_name}
-                  disabled={!editable}
+                  disabled={true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -498,7 +573,7 @@ export const OtherAccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.relationship}
-                  disabled={!editable}
+                  disabled={true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -510,7 +585,7 @@ export const OtherAccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.phoneNumber}
-                  disabled={!editable}
+                  disabled={true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -580,15 +655,12 @@ export const OtherAccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={DepartmentValues.departmentName}
-                  disabled={!editable}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 >
-                  {allDepartments.map((option) => (
-                    <option
-                      key={option.deparment_id}
-                      value={option.department_id}
-                    >
-                      {option.name}
+                  {deparments.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
                     </option>
                   ))}
                 </TextField>
@@ -686,7 +758,7 @@ export const OtherAccountProfileDetails = (props) => {
                     onChange={handleChangeCustomAttributeDeatils}
                     required
                     value={customAttributes[attribute]}
-                    disabled={!editable}
+                    disabled={editable && role !== other ? false : true}
                     className={editable ? '' : 'disabled-text-field'}
                   />
                 </Grid>
@@ -714,7 +786,7 @@ export const OtherAccountProfileDetails = (props) => {
         }}
       >
         <CardHeader
-          subheader={editable ? 'The information can be edited' : ''}
+          subheader={editable ? '' : 'The information can be edited'}
           title="Account Information"
         />
         <CardContent sx={{ pt: 0 }}>
@@ -734,7 +806,7 @@ export const OtherAccountProfileDetails = (props) => {
                       ? false
                       : true
                   }
-                  className={'disabled-text-field'}
+                  className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
               {/* {/* <Grid xs={12} md={6}>
@@ -761,7 +833,7 @@ export const OtherAccountProfileDetails = (props) => {
                       ? false
                       : true
                   }
-                  className={'disabled-text-field'}
+                  className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
               <Grid xs={12} md={12}>
@@ -777,7 +849,7 @@ export const OtherAccountProfileDetails = (props) => {
                       ? false
                       : true
                   }
-                  className={'disabled-text-field'}
+                  className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
               <Grid xs={12} md={6}>
@@ -789,8 +861,13 @@ export const OtherAccountProfileDetails = (props) => {
                   required
                   select
                   SelectProps={{ native: true }}
-                  value={accountValues.role ? accountValues.role : 'Employee'}
-                  disabled={!roleEdit && !editable ? true : false}
+                  value={accountValues.role}
+                  disabled={
+                    (other === 'Null' && (role === 'HR' || role === 'Admin')) ||
+                    role === 'Admin'
+                      ? false
+                      : true
+                  }
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {accountTypes.map((option) => (
@@ -833,6 +910,7 @@ export const OtherAccountProfileDetails = (props) => {
               borderRadius: '20px',
               display: editable ? 'flex' : 'none',
             }}
+            onClick={handleSave}
           >
             Save details
           </Button>

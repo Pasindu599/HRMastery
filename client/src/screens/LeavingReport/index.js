@@ -23,33 +23,37 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
 import { colors } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
-const gender = [
+const leave_type = [
   {
-    value: 'annual',
+    value: 1,
     label: 'Annual',
   },
   {
-    value: 'casual',
+    value: 2,
     label: 'Casual',
   },
   {
-    value: 'maternity',
+    value: 3,
     label: 'Maternity',
   },
   {
-    value: 'noPay',
+    value: 4,
     label: 'No Pay',
   },
 ];
 
 function LeavingRequest() {
+  const { id } = useParams();
+  const [requestDate, setRequestDate] = React.useState(null);
   const [values, setValues] = useState({
-    firstName: 'Anika',
-    lastName: 'Visser',
-    email: 'demo@devias.io',
-    gender: 'male',
-    maritalStatus: 'married',
+    reason: '',
+    leave_day_count: '',
+    approved: 0,
+    employee_id: id,
+    leave_type_id: '',
   });
 
   const handleChange = useCallback((event) => {
@@ -59,9 +63,70 @@ function LeavingRequest() {
     }));
   }, []);
 
-  const handleSubmit = useCallback((event) => {
-    event.preventDefault();
-  }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      reason: values.reason,
+      leave_day_count: values.leave_day_count,
+      approved: values.approved,
+      employee_id: values.employee_id,
+      leave_type_id: values.leave_type_id,
+      request_date: requestDate,
+    };
+
+    if (
+      data.reason === null ||
+      data.reason === undefined ||
+      data.reason === ''
+    ) {
+      alert('Please select reason');
+      return;
+    }
+
+    if (
+      data.leave_day_count === null ||
+      data.leave_day_count === undefined ||
+      data.leave_day_count === ''
+    ) {
+      alert('Please select leave day count');
+      return;
+    }
+
+    if (
+      data.leave_type_id === null ||
+      data.leave_type_id === undefined ||
+      data.leave_type_id === ''
+    ) {
+      alert('Please select leave type');
+      return;
+    }
+
+    if (
+      data.request_date === null ||
+      data.request_date === undefined ||
+      data.request_date === ''
+    ) {
+      alert('Please select request date');
+      return;
+    }
+
+    await axios
+      .post(`http://localhost:8000/emp/employee/leaving-request/${id}`, data)
+      .then((res) => {
+        console.log(res);
+        if (res.data.Status === true) {
+          alert('Request Sent');
+          // page refresh
+        } else {
+          alert('Request Failed');
+        }
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <Home />
@@ -107,7 +172,7 @@ function LeavingRequest() {
                   </Grid>
                 </Grid>
                 <Grid xs={12} md={12} lg={12}>
-                  <form autoComplete="off" noValidate onSubmit={handleSubmit}>
+                  <form autoComplete="off" noValidate>
                     <Card
                       sx={{
                         backgroundColor: '#F8E5FF',
@@ -131,18 +196,26 @@ function LeavingRequest() {
                               <FormLabel
                                 sx={{
                                   paddingLeft: '10px',
+                                  paddingBottom: '0px',
                                   color: '#600182',
                                   fontSize: '20px',
+                                  margin: '0px',
                                 }}
                               >
                                 Reason
                               </FormLabel>
                               <Textarea
+                                label="Reason"
+                                name="reason"
+                                multiline
                                 placeholder="Write your reason here"
                                 minRows={2}
                                 sx={{
                                   marginTop: '10px',
                                 }}
+                                onChange={handleChange}
+                                // value={values.reason}
+                                required
                               />
                             </Grid>
 
@@ -154,11 +227,13 @@ function LeavingRequest() {
                                 >
                                   <DatePicker
                                     label="Request Date"
-                                    //   value={value}
-                                    //   onChange={(newValue) => setValue(newValue)}
+                                    value={requestDate}
+                                    onChange={(newValue) => {
+                                      setRequestDate(
+                                        newValue.format('YYYY-MM-DD')
+                                      );
+                                    }}
                                     sx={{ width: '100%' }}
-                                    //   disabled={!editable}
-                                    //   className={editable ? '' : 'disabled-text-field'}
                                   />
                                 </DemoContainer>
                               </LocalizationProvider>
@@ -167,9 +242,10 @@ function LeavingRequest() {
                               <TextField
                                 fullWidth
                                 label="Number of Days"
-                                name="dayCount"
-                                //   onChange={handleChange}
-                                //   required
+                                name="leave_day_count"
+                                onChange={handleChange}
+                                value={values.leave_day_count}
+                                required
                                 //   value={values.lastName}
                                 //   disabled={!editable}
                                 //   className={editable ? '' : 'disabled-text-field'}
@@ -179,16 +255,16 @@ function LeavingRequest() {
                               <TextField
                                 fullWidth
                                 label="Leaving Type"
-                                name="leavingType"
-                                //   onChange={handleChange}
+                                name="leave_type_id"
                                 required
                                 select
                                 SelectProps={{ native: true }}
-                                //   value={values.gender}
+                                onChange={handleChange}
+                                // value={'Annual'}
                                 //   disabled={!editable}
                                 //   className={editable ? '' : 'disabled-text-field'}
                               >
-                                {gender.map((option) => (
+                                {leave_type.map((option) => (
                                   <option
                                     key={option.value}
                                     value={option.value}
@@ -207,6 +283,7 @@ function LeavingRequest() {
                 <Grid xs={12} md={8}>
                   <Button
                     variant="contained"
+                    onClick={handleSubmit}
                     sx={{
                       marginLeft: '20px',
                       backgroundColor: '#B514EE', // Set the initial background color

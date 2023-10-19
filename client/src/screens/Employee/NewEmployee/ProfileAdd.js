@@ -23,21 +23,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-const defaultLableNames = [
-  'employee_id',
-
-  'gender',
-  'birthdate',
-  'marital_status',
-  'supervisor_id',
-  'department_id',
-  'pay_grade_id',
-  'employee_status_id',
-  'job_title_id',
-];
-
 export const ProfileAdd = (props) => {
-  const { role } = useParams();
+  const { role, id } = useParams();
   const gender = [
     {
       value: 'male',
@@ -60,6 +47,85 @@ export const ProfileAdd = (props) => {
     },
   ];
 
+  const pay_grade = [
+    {
+      value: 1,
+      label: 'Level 1',
+    },
+    {
+      value: 2,
+      label: 'Level 2',
+    },
+    {
+      value: 3,
+      label: 'Level 3',
+    },
+    {
+      value: 4,
+      label: 'Level 4',
+    },
+  ];
+
+  const employment_statuses = [
+    {
+      value: 1,
+      label: 'Intern - full time',
+    },
+    {
+      value: 2,
+      label: 'Intern - part time',
+    },
+    {
+      value: 3,
+      label: 'Contract - full time',
+    },
+    {
+      value: 4,
+      label: 'Contract - part time',
+    },
+    {
+      value: 5,
+      label: 'Permanent',
+    },
+    {
+      value: 6,
+      label: 'Freelance',
+    },
+  ];
+
+  const job_title = [
+    {
+      value: 1,
+      label: 'HR Manager',
+    },
+    {
+      value: 2,
+      label: 'Accountant',
+    },
+    {
+      value: 3,
+      label: 'Software Engineer',
+    },
+    {
+      value: 4,
+      label: 'Project Manager',
+    },
+  ];
+
+  const deparments = [
+    {
+      value: 1,
+      label: 'Human Resource',
+    },
+    {
+      value: 2,
+      label: 'Finance and Accounting',
+    },
+    {
+      value: 3,
+      label: 'Operations',
+    },
+  ];
   // const accountTypes = [
   //   {
   //     value: 'Admin',
@@ -74,28 +140,62 @@ export const ProfileAdd = (props) => {
   //     label: 'Employee',
   //   },
   // ];
+  var accountTypes = [
+    {
+      value: '',
+      label: '',
+    },
+    {
+      value: 2,
+      label: 'HR Manager',
+    },
+    {
+      value: 3,
+      label: 'Employee',
+    },
+  ];
   if (role === 'Admin') {
-    var accountTypes = [
+    accountTypes = [
       {
-        value: 'HR',
+        value: '',
+        label: '',
+      },
+      {
+        value: 2,
         label: 'HR Manager',
       },
       {
-        value: 'Employee',
+        value: 3,
         label: 'Employee',
       },
     ];
   } else if (role === 'HR') {
-    var accountTypes = [
+    accountTypes = [
       {
-        value: 'Employee',
+        value: '',
+        label: '',
+      },
+      {
+        value: 3,
+        label: 'Employee',
+      },
+      {
+        value: 3,
         label: 'Employee',
       },
     ];
   } else if (role === 'Employee') {
-    var accountTypes = [
+    accountTypes = [
       {
-        value: 'Employee',
+        value: '',
+        label: '',
+      },
+      {
+        value: 3,
+        label: 'Employee',
+      },
+      {
+        value: 3,
         label: 'Employee',
       },
     ];
@@ -106,42 +206,51 @@ export const ProfileAdd = (props) => {
 
   const [allDetails, setAllDetails] = useState([]);
   const [birthday, setBirthday] = React.useState(null);
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({
+    firstName: '',
+    lastName: '',
+    gender: 'male',
+    maritalStatus: '1',
+    supervisorId: '',
+    payGrade: '1',
+    employeeStatusId: '1',
+    jobTitleId: '1',
+    departmentName: '1',
+  });
   const [contactValues, setContactValues] = useState({});
   const [DepartmentValues, setDepartmentValues] = useState({});
+  const [allPayGrades, setAllPayGrades] = useState([]);
+  const [allEmployeeStatus, setAllEmployeeStatus] = useState([]);
+  const [allJobTitles, setAllJobTitles] = useState([]);
 
-  const [accountValues, setAccountValues] = useState({});
+  const [accountValues, setAccountValues] = useState({
+    username: '',
+    password: '',
+    email: '',
+    role: '',
+  });
 
   useEffect(() => {
     console.log('AccountProfileDetails');
-    axios
-      .get('http://localhost:8000/emp/employee/details/')
-      .then((response) => {
-        const fieldNames = [];
-        for (const item of response.data.data) {
-          fieldNames.push(item.Field);
-        }
-        setLableNames(fieldNames);
-        const newCustomAttributes = [];
-        for (const item of fieldNames) {
-          if (!defaultLableNames.includes(item)) {
-            console.log(item);
-            newCustomAttributes.push(item);
-          }
-        }
-        setCustomAttributes(newCustomAttributes);
-        console.log(customAttributes);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    async function fetchData() {
+      await axios
+        .get(`http://localhost:8000/emp/employee/new/custom-attributes/${id}`)
+        .then((response) => {
+          setCustomAttributes(response.data.data);
+          console.log(customAttributes);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    fetchData();
     //check is there any lable name not in default lable names
   }, []);
 
   const { editable } = props;
 
   const handleChange = useCallback((event) => {
-    setAccountValues((prevState) => ({
+    setValues((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
@@ -167,6 +276,47 @@ export const ProfileAdd = (props) => {
       [event.target.name]: event.target.value,
     }));
   }, []);
+
+  const handleChangeCustomAttribute = useCallback((event) => {
+    setCustomAttributes((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    console.log(allDetails);
+
+    const data = {
+      ...accountValues,
+      ...contactValues,
+      ...DepartmentValues,
+      ...allDetails,
+      ...customAttributes,
+      ...values,
+
+      birthdate: birthday.format('YYYY-MM-DD'),
+      customAttributes: customAttributes,
+    };
+    console.log(data);
+    axios
+      .post('http://localhost:8000/emp/employee/add', data)
+      .then((res) => {
+        console.log(res);
+        if (res.data.Status === true) {
+          console.log(res);
+          alert('Employee Added Successfully');
+        } else {
+          alert('Error in Adding Employee');
+        }
+      })
+      .catch((err) => {
+        console.log('mmkms');
+        console.log(err);
+      });
+  };
 
   return (
     <form autoComplete="off" noValidate>
@@ -239,6 +389,7 @@ export const ProfileAdd = (props) => {
                   SelectProps={{ native: true }}
                   value={values.gender}
                   disabled={!editable}
+                  defaultValue={'male'}
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {gender.map((option) => (
@@ -262,6 +413,79 @@ export const ProfileAdd = (props) => {
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {maritalStatus.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Supervisor ID"
+                  name="supervisorId"
+                  onChange={handleChange}
+                  required
+                  value={values.supervisorId}
+                  disabled={!editable}
+                  className={editable ? '' : 'disabled-text-field'}
+                />
+              </Grid>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Pay Grade"
+                  name="payGrade"
+                  onChange={handleChange}
+                  required
+                  select
+                  SelectProps={{ native: true }}
+                  value={values.payGradeId}
+                  disabled={!editable}
+                  className={editable ? '' : 'disabled-text-field'}
+                >
+                  {pay_grade.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Employee Status"
+                  name="employeeStatusId"
+                  onChange={handleChange}
+                  required
+                  select
+                  SelectProps={{ native: true }}
+                  value={values.employeeStatusId}
+                  disabled={!editable}
+                  className={editable ? '' : 'disabled-text-field'}
+                >
+                  {employment_statuses.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+              </Grid>
+
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Job Title"
+                  name="jobTitleId"
+                  onChange={handleChange}
+                  required
+                  select
+                  SelectProps={{ native: true }}
+                  value={values.jobTitleId}
+                  disabled={!editable}
+                  className={editable ? '' : 'disabled-text-field'}
+                >
+                  {job_title.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -404,12 +628,20 @@ export const ProfileAdd = (props) => {
                   fullWidth
                   label="Department Name"
                   name="departmentName"
-                  onChange={handleChangeDepartmentDeatils}
+                  onChange={handleChange}
                   required
-                  value={DepartmentValues.departmentName}
+                  select
+                  SelectProps={{ native: true }}
+                  value={values.departmentName}
                   disabled={!editable}
                   className={editable ? '' : 'disabled-text-field'}
-                />
+                >
+                  {deparments.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
               </Grid>
             </Grid>
           </Box>
@@ -418,7 +650,11 @@ export const ProfileAdd = (props) => {
       {/* <Divider />
 
         <Divider /> */}
-      <Box sx={{ display: customAttributes.length > 0 ? 'block' : 'none' }}>
+      <Box
+        sx={{
+          display: Object.keys(customAttributes).length > 0 ? 'block' : 'none',
+        }}
+      >
         <br></br>
       </Box>
 
@@ -429,7 +665,7 @@ export const ProfileAdd = (props) => {
           border: '1px solid rgba(73, 2, 106, 0.60)',
           boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
           padding: '20px',
-          display: customAttributes.length > 0 ? 'block' : 'none',
+          display: Object.keys(customAttributes).length > 0 ? 'block' : 'none',
         }}
       >
         <CardHeader
@@ -474,15 +710,15 @@ export const ProfileAdd = (props) => {
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid> */}
-              {customAttributes.map((attribute) => (
+              {Object.keys(customAttributes).map((attribute) => (
                 <Grid xs={12} md={6}>
                   <TextField
                     fullWidth
                     label={attribute}
                     name={attribute}
-                    onChange={handleChangeDepartmentDeatils}
+                    onChange={handleChangeCustomAttribute}
                     required
-                    value={allDetails[attribute]}
+                    value={customAttributes[attribute]}
                     disabled={!editable}
                     className={editable ? '' : 'disabled-text-field'}
                   />
@@ -526,7 +762,6 @@ export const ProfileAdd = (props) => {
                   onChange={handleChangeAccountDetails}
                   required
                   value={accountValues.username}
-                  disabled={role === 'Employee' ? true : false}
                   className={'disabled-text-field'}
                 />
               </Grid>
@@ -549,7 +784,6 @@ export const ProfileAdd = (props) => {
                   onChange={handleChangeAccountDetails}
                   required
                   value={accountValues.password}
-                  disabled={role === 'Employee' ? true : false}
                   className={'disabled-text-field'}
                 />
               </Grid>
@@ -561,7 +795,6 @@ export const ProfileAdd = (props) => {
                   onChange={handleChangeAccountDetails}
                   required
                   value={accountValues.email}
-                  disabled={role === 'Employee' ? true : false}
                   className={'disabled-text-field'}
                 />
               </Grid>
@@ -570,13 +803,11 @@ export const ProfileAdd = (props) => {
                   fullWidth
                   label="Account Type"
                   name="role"
-                  onChange={handleChange}
+                  onChange={handleChangeAccountDetails}
                   required
                   select
                   SelectProps={{ native: true }}
                   value={accountValues.role}
-                  disabled={role === 'Employee' ? true : false}
-                  className={editable ? '' : 'disabled-text-field'}
                 >
                   {accountTypes.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -618,6 +849,7 @@ export const ProfileAdd = (props) => {
               borderRadius: '20px',
               display: editable ? 'flex' : 'none',
             }}
+            onClick={handleSubmit}
           >
             Save details
           </Button>

@@ -8,6 +8,10 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
+import axios from 'axios';
+import { useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 
 const remainingDays = {
   annualDays: '30',
@@ -18,6 +22,27 @@ const remainingDays = {
 
 export const DayCount = (props) => {
   const { leavingType } = props;
+  const { id } = useParams();
+  const [remainingDays, setRemainingDays] = useState({
+    annualDays: '',
+    casualDays: '',
+    maternityDays: '',
+    noPayDays: '',
+  });
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/emp/employee/leaving-count/${id}`)
+      .then((res) => {
+        setRemainingDays({
+          annualDays: res.data.data[0].remaining_days,
+          casualDays: res.data.data[1].remaining_days,
+          maternityDays: res.data.data[2].remaining_days,
+          noPayDays: res.data.data[3].remaining_days,
+        });
+      });
+  }, []);
+
   return (
     <Card
       sx={{

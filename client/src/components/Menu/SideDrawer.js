@@ -50,6 +50,7 @@ const theme = createTheme({
 export default function SideDrawer(props) {
   const { role, id } = useParams();
   const navigate = useNavigate();
+
   const [drawerBackground, setDrawerBackground] = React.useState('#B514EE'); // Initialize background color
 
   const [openList, setOpenList] = React.useState(false);
@@ -64,7 +65,7 @@ export default function SideDrawer(props) {
   };
 
   const handeleRequestLeave = () => {
-    navigate('/leaving-request');
+    navigate('/leaving-request/' + role + '/' + id + '/', { replace: true });
   };
 
   const theme = useTheme();
@@ -102,6 +103,11 @@ export default function SideDrawer(props) {
 
                   backgroundColor: drawerBackground,
                 }}
+                onClick={() => {
+                  navigate('/profile/' + role + '/' + id + '/', {
+                    replace: true,
+                  });
+                }}
               >
                 <ListItemIcon sx={{ marginLeft: 4, color: 'inherit' }}>
                   <InboxIcon />
@@ -109,7 +115,7 @@ export default function SideDrawer(props) {
                 <ListItemText primary="User Profile" sx={{ marginRight: 4 }} />
               </ListItemButton>
             </ListItem>
-            <ListItem sx={{ padding: '2' }}>
+            {/* <ListItem sx={{ padding: '2' }}>
               <ListItemButton onClick={handleClick}>
                 <ListItemIcon sx={{ marginLeft: 4 }}>
                   <InboxIcon />
@@ -135,15 +141,6 @@ export default function SideDrawer(props) {
                   <ListItemIcon>
                     <StarBorder />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="All Employees"
-                    onClick={() => {
-                      // go and refresh the page
-                      navigate('/all-employee/' + role + '/' + id + '/', {
-                        replace: true,
-                      });
-                    }}
-                  />
                 </ListItemButton>
                 <ListItemButton sx={{ pl: 10 }}>
                   <ListItemIcon>
@@ -152,7 +149,32 @@ export default function SideDrawer(props) {
                   <ListItemText primary="HR Manager" />
                 </ListItemButton>
               </List>
-            </Collapse>
+            </Collapse> */}
+            <ListItem sx={{ padding: '2' }}>
+              <ListItemButton
+                component="a"
+                onClick={() => {
+                  // go and refresh the page
+                  navigate('/all-employee/' + role + '/' + id + '/', {
+                    replace: true,
+                  });
+                }}
+                sx={{
+                  color: 'inherit',
+                  borderRadius: '20px',
+
+                  backgroundColor: drawerBackground,
+                }}
+              >
+                <ListItemIcon sx={{ marginLeft: 4 }}>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="All Employees"
+                  sx={{ marginRight: 4, color: 'inherit' }}
+                />
+              </ListItemButton>
+            </ListItem>
             <ListItem sx={{ padding: '2' }}>
               <ListItemButton
                 component="a"
@@ -182,6 +204,11 @@ export default function SideDrawer(props) {
                   borderRadius: '20px',
 
                   backgroundColor: drawerBackground,
+                }}
+                onClick={() => {
+                  navigate('/leave-accept/' + role + '/' + id + '/', {
+                    replace: true,
+                  });
                 }}
               >
                 <ListItemIcon sx={{ marginLeft: 4 }}>
@@ -233,7 +260,7 @@ export default function SideDrawer(props) {
                 />
               </ListItemButton>
             </ListItem>
-            <ListItem sx={{ padding: '2' }}>
+            {/* <ListItem sx={{ padding: '2' }}>
               <ListItemButton
                 component="a"
                 href="#Report"
@@ -252,7 +279,7 @@ export default function SideDrawer(props) {
                   sx={{ marginRight: 4, color: 'inherit' }}
                 />
               </ListItemButton>
-            </ListItem>
+            </ListItem> */}
           </List>
           <Divider></Divider>
           <List>
@@ -272,6 +299,9 @@ export default function SideDrawer(props) {
                 <ListItemText
                   primary="Log Out"
                   sx={{ marginRight: 4, color: 'inherit' }}
+                  onClick={() => {
+                    navigate('/', { replace: true });
+                  }}
                 />
               </ListItemButton>
             </ListItem>
