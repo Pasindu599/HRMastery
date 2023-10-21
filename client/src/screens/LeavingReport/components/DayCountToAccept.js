@@ -12,7 +12,6 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import { TypeSpecimenSharp } from '@mui/icons-material';
 
 const remainingDays = {
   annualDays: '30',
@@ -21,9 +20,9 @@ const remainingDays = {
   noPayDays: '10',
 };
 
-export const DayCount = (props) => {
+export const DayCountToAccept = (props) => {
   const { leavingType, type } = props;
-  const { id } = useParams();
+  const { otherid } = useParams();
   const [remainingDays, setRemainingDays] = useState({
     annualDays: '',
     casualDays: '',
@@ -33,7 +32,7 @@ export const DayCount = (props) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/emp/employee/leaving-count/${id}`)
+      .get(`http://localhost:8000/emp/employee/leaving-count/${otherid}`)
       .then((res) => {
         setRemainingDays({
           annualDays: res.data.data[0].remaining_days,
@@ -85,11 +84,11 @@ export const DayCount = (props) => {
             {remainingDays[leavingType]}
           </Typography>
           {/* <Typography color="text.secondary" variant="body2">
-          {user.city} {user.country}
-        </Typography>
-        <Typography color="text.secondary" variant="body2">
-          {user.timezone}
-        </Typography> */}
+            {user.city} {user.country}
+          </Typography>
+          <Typography color="text.secondary" variant="body2">
+            {user.timezone}
+          </Typography> */}
         </Box>
       </CardContent>
       <Divider />

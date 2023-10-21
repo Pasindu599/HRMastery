@@ -1,7 +1,23 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 const db = require('./database');
+
+function objectToSQLUpdateString(obj) {
+  const entries = Object.entries(obj);
+  const sqlUpdates = entries.map(([key, value]) => {
+    if (value === null) {
+      return `${key} = NULL`;
+    } else if (typeof value === 'string') {
+      return `${key} = '${value}'`;
+    } else {
+      // Handle other data types as needed
+      return `${key} = ${value}`;
+    }
+  });
+  return sqlUpdates.join(',\n');
+}
 
 router.get('/employee/details/:id', (req, res) => {
   const emp_id = req.params.id;
@@ -10,6 +26,74 @@ router.get('/employee/details/:id', (req, res) => {
   db.query(sql, [emp_id])
     .then((result) => {
       return res.json({ Status: true, data: result[0] });
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+router.get('/employee/custom-attributes/:id', (req, res) => {
+  const defaultLableNames = [
+    'employee_id',
+    'first_name',
+    'last_name',
+    'gender',
+    'birthdate',
+    'marital_status',
+    'supervisor_id',
+    'department_id',
+    'pay_grade_id',
+    'employee_status_id',
+    'job_title_id',
+  ];
+  const emp_id = req.params.id;
+  const sql = 'SELECT * FROM employees where employee_id = ?';
+  db.query(sql, [emp_id])
+    .then((result) => {
+      // get all the keys from the result
+      const keys = Object.keys(result[0][0]);
+      // filter the keys
+      const customAttributesVlaues = {};
+      keys.forEach((key) => {
+        if (!defaultLableNames.includes(key)) {
+          customAttributesVlaues[key] = result[0][0][key];
+        }
+      });
+      return res.json({ Status: true, data: customAttributesVlaues });
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+router.get('/employee/new/custom-attributes/:id', (req, res) => {
+  const defaultLableNames = [
+    'employee_id',
+    'first_name',
+    'last_name',
+    'gender',
+    'birthdate',
+    'marital_status',
+    'supervisor_id',
+    'department_id',
+    'pay_grade_id',
+    'employee_status_id',
+    'job_title_id',
+  ];
+  const emp_id = req.params.id;
+  const sql = 'SELECT * FROM employees where employee_id = ?';
+  db.query(sql, [emp_id])
+    .then((result) => {
+      // get all the keys from the result
+      const keys = Object.keys(result[0][0]);
+      // filter the keys
+      const customAttributesVlaues = {};
+      keys.forEach((key) => {
+        if (!defaultLableNames.includes(key)) {
+          customAttributesVlaues[key] = '';
+        }
+      });
+      return res.json({ Status: true, data: customAttributesVlaues });
     })
     .catch((err) => {
       return res.json({ Status: false });
@@ -52,6 +136,18 @@ router.get('/employee/dependents/:id', (req, res) => {
     });
 });
 
+router.get('/employee/profile-view/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql = 'SELECT * FROM profile_view where employee_id = ?';
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json({ Status: true, data: result[0] });
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
 router.get('/employee/table/', (req, res) => {
   const sql =
     'select e.employee_id, e.first_name, e.last_name , ua.user_email, ecd.contact_number, uar.role from employees as e left join emergency_contact_details as ecd  on e.employee_id = ecd.employee_id left join user_accounts as ua on ua.employee_id = e.employee_id left join user_account_roles as uar on uar.role_id = ua.role_id';
@@ -62,6 +158,225 @@ router.get('/employee/table/', (req, res) => {
     })
     .catch((err) => {
       return res.json({ Status: false });
+    });
+});
+
+router.post('/employee/leaving-request/:id', (req, res) => {
+  const sql =
+    'insert into leave_requests (`reason`, `leave_day_count`, `leave_start_date`, `approved`, `employee_id`, `leave_type_id` , `request_date`) values ( ? , NOW())';
+  console.log(req.body);
+  const leaving_request = [
+    req.body.reason,
+    parseInt(req.body.leave_day_count),
+    req.body.request_date,
+    req.body.approved,
+    req.params.id,
+    // convert into int
+    parseInt(req.body.leave_type_id),
+  ];
+
+  db.query(sql, [leaving_request])
+    .then((result) => {
+      return res.json({ Status: true });
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+router.get('/employee/leaving-request/to-accept/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql =
+    'select * from leave_requests l join employees e on l.employee_id = e.employee_id  where  l.employee_id= ?';
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json({ Status: true, data: result[0] });
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+router.get('/employee/leaving-count/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql =
+    'select leave_type_id , remaining_days from remaining_leaving_days r where  r.employee_id= ?';
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json({ Status: true, data: result[0] });
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+router.get('/leave/pending/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 0`;
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json(result[0]);
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+router.get('/leave/accepted/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 1`;
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json(result[0]);
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+router.get('/leave/rejected/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 2`;
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json(result[0]);
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+// insert new employee to the table and add to the other related tables
+
+router.post('/employee/add/', async (req, res) => {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  console.log(hashedPassword);
+
+  const sql1 =
+    'CALL InsertEmployeeAndRelatedData( ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?, ?, ?, ?, ?,?)';
+
+  // update the custom attributes of the employee table'
+  const sql2 = 'UPDATE employees SET ? WHERE employee_id = ?';
+
+  const employeeId = 'SELECT  GetLastEmployeeID()';
+
+  console.log(req.body.customAttributes);
+
+  const sqlString = objectToSQLUpdateString(req.body.customAttributes);
+  console.log(sqlString);
+
+  const employee = [
+    req.body.firstName,
+    req.body.lastName,
+    req.body.gender,
+    req.body.birthdate,
+    parseInt(req.body.maritalStatus),
+    req.body.supervisorId,
+    parseInt(req.body.departmentName),
+    parseInt(req.body.payGrade),
+    parseInt(req.body.employeeStatusId),
+    parseInt(req.body.jobTitleId),
+    req.body.name,
+    req.body.relationship,
+    req.body.phoneNumber,
+    req.body.username,
+    hashedPassword,
+    req.body.email,
+    parseInt(req.body.role),
+  ];
+
+  console.log(employee);
+  await db
+    .query(sql1, employee)
+    .then(async (result) => {
+      if (
+        req.body.customAttributes === undefined ||
+        req.body.customAttributes === null ||
+        Object.keys(req.body.customAttributes).length === 0
+      ) {
+        return res.json({ Status: true, customAttributes: false });
+      }
+      await db.query(employeeId).then((result) => {
+        const id = result[0][0]['GetLastEmployeeID()'];
+        console.log(id);
+        db.query(sql2, [req.body.customAttributes, id])
+          .then((result) => {
+            return res.json({ Status: true, customAttributesFalse: false });
+          })
+          .catch((err) => {
+            console.log(err);
+            return res.json({ Status: false, customAttributesFalse: true });
+          });
+      });
+    })
+    .catch((err) => {
+      console.log('jkhkj');
+      return res.json({ Status: false, customAttributesFalse: false });
+    });
+});
+
+// update the employee details
+router.post('/employee/update/:id', async (req, res) => {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  console.log(hashedPassword);
+  const emp_id = req.params.id;
+  const sql1 =
+    'CALL UpdateEmployeeAndRelatedData( ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?, ?, ?, ?, ?,?,?)';
+  const sql2 = 'UPDATE employees SET ? WHERE employee_id = ?';
+
+  const sqlString = objectToSQLUpdateString(req.body.customAttributes);
+  console.log(sqlString);
+  console.log(req.body);
+  const employee = [
+    emp_id,
+    req.body.firstName,
+    req.body.lastName,
+    req.body.gender,
+    req.body.birthdate,
+    parseInt(req.body.maritalStatus),
+    req.body.supervisorId,
+    parseInt(req.body.departmentName),
+    parseInt(req.body.payGrade),
+    parseInt(req.body.employeeStatusId),
+    parseInt(req.body.jobTitleId),
+    req.body.contact_name,
+    req.body.relationship,
+    req.body.phoneNumber,
+    req.body.username,
+    hashedPassword,
+    req.body.email,
+    parseInt(req.body.role),
+  ];
+  console.log(employee);
+  console.log(Object.keys(req.body.customAttributes).length, 'custom');
+  await db
+    .query(sql1, employee)
+    .then(async (result) => {
+      console.log('result', result);
+      if (
+        req.body.customAttributes === undefined ||
+        req.body.customAttributes === null ||
+        // get the length of the object
+        Object.keys(req.body.customAttributes).length === 0
+      ) {
+        console.log('custom');
+        return res.json({ Status: true, customAttributesFalse: false });
+      }
+
+      await db
+        .query(sql2, [req.body.customAttributes, emp_id])
+        .then((result) => {
+          return res.json({ Status: true, customAttributesFalse: false });
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.json({ Status: false, customAttributesFalse: true });
+        });
+    })
+    .catch((err) => {
+      console.log('jkhkj');
+      return res.json({ Status: false, customAttributesFalse: false });
     });
 });
 

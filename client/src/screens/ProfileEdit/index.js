@@ -19,26 +19,10 @@ function EditProfile(children) {
   const { role, id } = useParams();
   console.log('role', role, 'id', id);
 
-  const location = useLocation();
   console.log('ProfileEdit');
-  console.log(location.state);
 
   const [edit, setEdit] = useState(false);
   const [editButton, setEditButton] = useState(false);
-  const [accountTypes, setAccountTypes] = useState([
-    {
-      value: 'Admin',
-      label: 'Admin',
-    },
-    {
-      value: 'HR',
-      label: 'HR Manager',
-    },
-    {
-      value: 'Employee',
-      label: 'Employee',
-    },
-  ]);
 
   // set editable to true or false
   useEffect(() => {
@@ -80,7 +64,7 @@ function EditProfile(children) {
                 <div>
                   <Grid container spacing={3}>
                     <Grid xs={12} md={3.5} lg={3}>
-                      <AccountProfile>{location.state}</AccountProfile>
+                      <AccountProfile></AccountProfile>
                       <br />
                       <Button
                         fullWidth
@@ -108,7 +92,6 @@ function EditProfile(children) {
                     <Grid xs={12} md={8} lg={8}>
                       <AccountProfileDetails
                         editable={edit}
-                        accountTypes={accountTypes}
                       ></AccountProfileDetails>
                     </Grid>
                   </Grid>

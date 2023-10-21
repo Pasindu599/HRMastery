@@ -8,7 +8,9 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 // props ={
 //     "id": 1,
@@ -19,17 +21,36 @@ import { useState } from 'react';
 //     "phone_number": "2148986860"
 // }
 
-export const AccountProfile = (props) => {
-  const { employee_id, first_name, last_name } = props.children;
+export const AccountProfile = () => {
+  const { id } = useParams();
 
-  const [user, setUser] = useState({
-    avatar: '/assets/avatars/avatar-anika-visser.png',
-    // city: 'Los Angeles',
-    // country: 'USA',
-    // jobTitle: 'Senior Developer',
-    name: `${first_name} ${last_name}`,
-    // timezone: 'GTM-7',
-  });
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    console.log('AccountProfile');
+
+    async function fetchData() {
+      await axios
+        .get(`http://localhost:8000/emp/employee/profile-view/${id}`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.Status === true) {
+            console.log(res);
+            const employee_data = res.data.data;
+            console.log(employee_data);
+
+            setUser({
+              avatar: '/assets/avatars/avatar-anika-visser.png',
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    fetchData();
+  }, []);
+
   return (
     <>
       <Card
@@ -56,11 +77,11 @@ export const AccountProfile = (props) => {
                 width: 80,
               }}
             />
-            <Typography gutterBottom variant="h5">
+            {/* <Typography gutterBottom variant="h5">
               {first_name} {last_name}
-            </Typography>
+            </Typography> */}
             <Typography color="text.secondary" variant="body2">
-              {employee_id}
+              {id}
             </Typography>
             {/* <Typography color="text.secondary" variant="body2">
               {user.timezone}

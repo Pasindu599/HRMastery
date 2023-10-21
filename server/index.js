@@ -8,11 +8,15 @@ const db = require('./database'),
   userRoutes = require('./user');
 employeeRoutes = require('./employee');
 branchRoutes = require('./branch');
+supervisorRoutes = require('./supervisor');
+hrRoutes = require('./hr');
 
 // middleware
 app.use('/api/', userRoutes);
 app.use('/emp/', employeeRoutes);
 app.use('/branch/', branchRoutes);
+app.use('/sup/', supervisorRoutes);
+app.use('/hr/', hrRoutes);
 
 db.query('SELECT 1')
   .then(() => {

@@ -14,10 +14,13 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Engineering } from '@mui/icons-material';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const settings = ['Profile', 'Logout'];
 
 function Header() {
+  const navigate = useNavigate();
+  const { role, id } = useParams();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -32,8 +35,16 @@ function Header() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (e) => {
     setAnchorElUser(null);
+
+    if (e.target.textContent === 'Logout') {
+      window.location.href = '/';
+    }
+
+    if (e.target.textContent === 'Profile') {
+      window.location.href = '/profile/' + role + '/' + id;
+    }
   };
   return (
     <AppBar
@@ -124,7 +135,7 @@ function Header() {
                 marginLeft: 1,
               }}
             >
-              <Typography
+              {/* <Typography
                 sx={{
                   color: '#343A40',
                 }}
@@ -138,7 +149,7 @@ function Header() {
                 }}
               >
                 Employee
-              </Typography>
+              </Typography> */}
             </Box>
           </Box>
         </Toolbar>
