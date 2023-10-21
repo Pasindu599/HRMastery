@@ -15,6 +15,8 @@ import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Tab } from '@mui/material';
 import Table from '../../components/Table/LeavesToAccept';
+import RejectTable from '../../components/Table/LeavesReject';
+import AcceptedTable from '../../components/Table/LeavesApproved';
 
 function LeaveAccept(children) {
   const navigate = useNavigate();
@@ -43,12 +45,30 @@ function LeaveAccept(children) {
             <Container maxWidth="lg">
               <Stack spacing={4}>
                 <box>
-                  <Typography variant="h4">Accept Leaves</Typography>
+                  <Typography variant="h4">To Accept Leaves</Typography>
                 </box>
                 <br />
                 <div>
                   <Grid container spacing={3}>
                     <Table />
+                  </Grid>
+                </div>
+                <box>
+                  <Typography variant="h4">Accepted Leaves</Typography>
+                </box>
+                <br />
+                <div>
+                  <Grid container spacing={3}>
+                    <AcceptedTable />
+                  </Grid>
+                </div>
+                <box>
+                  <Typography variant="h4">Rejected Leaves</Typography>
+                </box>
+                <br />
+                <div>
+                  <Grid container spacing={3}>
+                    <RejectTable />
                   </Grid>
                 </div>
               </Stack>

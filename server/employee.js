@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 const db = require('./database');
 
@@ -162,8 +163,8 @@ router.get('/employee/table/', (req, res) => {
 
 router.post('/employee/leaving-request/:id', (req, res) => {
   const sql =
-    'insert into leave_requests (`reason`, `leave_day_count`, `request_date`, `approved`, `employee_id`, `leave_type_id`) values ( ?)';
-
+    'insert into leave_requests (`reason`, `leave_day_count`, `leave_start_date`, `approved`, `employee_id`, `leave_type_id` , `request_date`) values ( ? , NOW())';
+  console.log(req.body);
   const leaving_request = [
     req.body.reason,
     parseInt(req.body.leave_day_count),
@@ -177,6 +178,18 @@ router.post('/employee/leaving-request/:id', (req, res) => {
   db.query(sql, [leaving_request])
     .then((result) => {
       return res.json({ Status: true });
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+router.get('/employee/leaving-request/to-accept/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql =
+    'select * from leave_requests l join employees e on l.employee_id = e.employee_id  where  l.employee_id= ?';
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json({ Status: true, data: result[0] });
     })
     .catch((err) => {
       return res.json({ Status: false });
@@ -196,9 +209,49 @@ router.get('/employee/leaving-count/:id', (req, res) => {
     });
 });
 
+router.get('/leave/pending/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 0`;
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json(result[0]);
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+router.get('/leave/accepted/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 1`;
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json(result[0]);
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+router.get('/leave/rejected/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 2`;
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json(result[0]);
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
 // insert new employee to the table and add to the other related tables
 
-router.post('/employee/add/', (req, res) => {
+router.post('/employee/add/', async (req, res) => {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  console.log(hashedPassword);
+
   const sql1 =
     'CALL InsertEmployeeAndRelatedData( ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?, ?, ?, ?, ?,?)';
 
@@ -223,46 +276,50 @@ router.post('/employee/add/', (req, res) => {
     parseInt(req.body.payGrade),
     parseInt(req.body.employeeStatusId),
     parseInt(req.body.jobTitleId),
-    req.body.contact_name,
+    req.body.name,
     req.body.relationship,
     req.body.phoneNumber,
     req.body.username,
-    req.body.password,
+    hashedPassword,
     req.body.email,
     parseInt(req.body.role),
   ];
 
   console.log(employee);
-  db.query(sql1, employee)
-    .then((result) => {
+  await db
+    .query(sql1, employee)
+    .then(async (result) => {
       if (
         req.body.customAttributes === undefined ||
         req.body.customAttributes === null ||
-        req.body.customAttributes.length === 0
+        Object.keys(req.body.customAttributes).length === 0
       ) {
         return res.json({ Status: true, customAttributes: false });
       }
-      db.query(employeeId).then((result) => {
+      await db.query(employeeId).then((result) => {
         const id = result[0][0]['GetLastEmployeeID()'];
         console.log(id);
         db.query(sql2, [req.body.customAttributes, id])
           .then((result) => {
-            return res.json({ Status: true });
+            return res.json({ Status: true, customAttributesFalse: false });
           })
           .catch((err) => {
             console.log(err);
-            return res.json({ Status: false });
+            return res.json({ Status: false, customAttributesFalse: true });
           });
       });
     })
     .catch((err) => {
       console.log('jkhkj');
-      return res.json({ Status: false });
+      return res.json({ Status: false, customAttributesFalse: false });
     });
 });
 
 // update the employee details
-router.post('/employee/update/:id', (req, res) => {
+router.post('/employee/update/:id', async (req, res) => {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  console.log(hashedPassword);
   const emp_id = req.params.id;
   const sql1 =
     'CALL UpdateEmployeeAndRelatedData( ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?, ?, ?, ?, ?,?,?)';
@@ -270,7 +327,7 @@ router.post('/employee/update/:id', (req, res) => {
 
   const sqlString = objectToSQLUpdateString(req.body.customAttributes);
   console.log(sqlString);
-
+  console.log(req.body);
   const employee = [
     emp_id,
     req.body.firstName,
@@ -287,14 +344,15 @@ router.post('/employee/update/:id', (req, res) => {
     req.body.relationship,
     req.body.phoneNumber,
     req.body.username,
-    req.body.password,
+    hashedPassword,
     req.body.email,
     parseInt(req.body.role),
   ];
   console.log(employee);
   console.log(Object.keys(req.body.customAttributes).length, 'custom');
-  db.query(sql1, employee)
-    .then((result) => {
+  await db
+    .query(sql1, employee)
+    .then(async (result) => {
       console.log('result', result);
       if (
         req.body.customAttributes === undefined ||
@@ -303,21 +361,22 @@ router.post('/employee/update/:id', (req, res) => {
         Object.keys(req.body.customAttributes).length === 0
       ) {
         console.log('custom');
-        return res.json({ Status: true, customAttributes: false });
+        return res.json({ Status: true, customAttributesFalse: false });
       }
 
-      db.query(sql2, [req.body.customAttributes, emp_id])
+      await db
+        .query(sql2, [req.body.customAttributes, emp_id])
         .then((result) => {
-          return res.json({ Status: true });
+          return res.json({ Status: true, customAttributesFalse: false });
         })
         .catch((err) => {
           console.log(err);
-          return res.json({ Status: false });
+          return res.json({ Status: false, customAttributesFalse: true });
         });
     })
     .catch((err) => {
       console.log('jkhkj');
-      return res.json({ Status: false });
+      return res.json({ Status: false, customAttributesFalse: false });
     });
 });
 

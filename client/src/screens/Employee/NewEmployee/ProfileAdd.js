@@ -308,6 +308,7 @@ export const ProfileAdd = (props) => {
         if (res.data.Status === true) {
           console.log(res);
           alert('Employee Added Successfully');
+          window.location.reload();
         } else {
           alert('Error in Adding Employee');
         }

@@ -243,19 +243,23 @@ export default function SideDrawer(props) {
             <ListItem sx={{ padding: '2' }}>
               <ListItemButton
                 component="a"
-                href="#Report"
                 sx={{
                   color: 'inherit',
                   borderRadius: '20px',
 
                   backgroundColor: drawerBackground,
                 }}
+                onClick={() => {
+                  navigate('/custom-attributes/' + role + '/' + id + '/', {
+                    replace: true,
+                  });
+                }}
               >
                 <ListItemIcon sx={{ marginLeft: 4 }}>
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Custom Variables"
+                  primary="Custom Attributes"
                   sx={{ marginRight: 4, color: 'inherit' }}
                 />
               </ListItemButton>

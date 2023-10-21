@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Home from '../../components/Header/index';
 import SideDrawer from '../../components/Menu/SideDrawer';
 import Box from '@mui/material/Box';
@@ -6,7 +6,7 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { DayCount } from './components/DayCount';
+import { DayCountToAccept } from './components/DayCountToAccept';
 import { useState, useCallback } from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -23,10 +23,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
 import { colors } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import LeavesTable from '../../components/Table/PendingLeaves';
-import { pendingLeaves, approvedLeaves, rejectedLeaves } from './axios';
+import { useNavigate } from 'react-router-dom';
 
 const leave_type = [
   {
@@ -47,16 +46,42 @@ const leave_type = [
   },
 ];
 
-function LeavingRequest() {
-  const { id } = useParams();
-  const [requestDate, setRequestDate] = React.useState(null);
+function AcceptPage() {
+  const navigate = useNavigate();
+  const { otherid, id, role } = useParams();
+  const [leave_start_date, setLeaveStartDate] = React.useState(null);
+  const [request_date, setRequestDate] = React.useState(null);
   const [values, setValues] = useState({
     reason: '',
     leave_day_count: '',
     approved: 0,
-    employee_id: id,
+    employee_id: otherid,
     leave_type_id: '',
+    employee_name: '',
+    request_id: '',
   });
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:8000/emp/employee/leaving-request/to-accept/${otherid}`
+      )
+      .then((res) => {
+        console.log(res.data.data[0]);
+        setValues({
+          reason: res.data.data[0].reason,
+          leave_day_count: res.data.data[0].leave_day_count,
+          approved: res.data.data[0].approved,
+          employee_id: otherid,
+          leave_type_id: res.data.data[0].leave_type_id,
+          employee_name:
+            res.data.data[0].first_name + ' ' + res.data.data[0].last_name,
+          request_id: res.data.data[0].request_id,
+        });
+        setLeaveStartDate(dayjs(res.data.data[0].leave_start_date));
+        setRequestDate(dayjs(res.data.data[0].request_date));
+      });
+  }, []);
 
   const handleChange = useCallback((event) => {
     setValues((prevState) => ({
@@ -65,67 +90,32 @@ function LeavingRequest() {
     }));
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleChangeAccept = async (e) => {
     e.preventDefault();
-
-    const data = {
-      reason: values.reason,
-      leave_day_count: values.leave_day_count,
-      approved: values.approved,
-      employee_id: values.employee_id,
-      leave_type_id: values.leave_type_id,
-      request_date: requestDate,
-    };
-
-    if (
-      data.reason === null ||
-      data.reason === undefined ||
-      data.reason === ''
-    ) {
-      alert('Please select reason');
-      return;
-    }
-
-    if (
-      data.leave_day_count === null ||
-      data.leave_day_count === undefined ||
-      data.leave_day_count === ''
-    ) {
-      alert('Please select leave day count');
-      return;
-    }
-
-    if (
-      data.leave_type_id === null ||
-      data.leave_type_id === undefined ||
-      data.leave_type_id === ''
-    ) {
-      alert('Please select leave type');
-      return;
-    }
-
-    if (
-      data.request_date === null ||
-      data.request_date === undefined ||
-      data.request_date === ''
-    ) {
-      alert('Please select request date');
-      return;
-    }
-
-    await axios
-      .post(`http://localhost:8000/emp/employee/leaving-request/${id}`, data)
+    axios
+      .put('http://localhost:8000/sup/leave/accept/' + values.request_id)
       .then((res) => {
-        console.log(res);
-        if (res.data.Status === true) {
-          alert('Request Sent');
-          // page refresh
-        } else {
-          alert('Request Failed');
-        }
+        console.log('Leave accepted');
+        alert('Leave accepted');
+        navigate('/leave-accept/' + role + '/' + id);
       })
-
       .catch((err) => {
+        alert('Error in accepting leave');
+        console.log(err);
+      });
+  };
+
+  const handleChangeReject = async (e) => {
+    e.preventDefault();
+    axios
+      .put('http://localhost:8000/sup/leave/reject/' + values.request_id)
+      .then((res) => {
+        console.log('Leave rejected');
+        alert('Leave rejected');
+        navigate('/leave-accept/' + role + '/' + id);
+      })
+      .catch((err) => {
+        alert('Error in rejecting leave');
         console.log(err);
       });
   };
@@ -161,28 +151,28 @@ function LeavingRequest() {
                   }}
                 >
                   <Grid xs={12} md={2.5} lg={2.5}>
-                    <DayCount
+                    <DayCountToAccept
                       leavingType="annualDays"
                       type="Annual Leaving Days"
-                    ></DayCount>
+                    ></DayCountToAccept>
                   </Grid>
                   <Grid xs={12} md={2.5} lg={2.5}>
-                    <DayCount
+                    <DayCountToAccept
                       leavingType="casualDays"
                       type="Casual Leaving Days"
-                    ></DayCount>
+                    ></DayCountToAccept>
                   </Grid>
                   <Grid xs={12} md={2.5} lg={2.5}>
-                    <DayCount
+                    <DayCountToAccept
                       leavingType="maternityDays"
                       type="Maternity Leaving Days"
-                    ></DayCount>
+                    ></DayCountToAccept>
                   </Grid>
                   <Grid xs={12} md={2.5} lg={2.5}>
-                    <DayCount
+                    <DayCountToAccept
                       leavingType="noPayDays"
                       type="No Pay Leaving Days"
-                    ></DayCount>
+                    ></DayCountToAccept>
                   </Grid>
                 </Grid>
                 <Grid xs={12} md={12} lg={12}>
@@ -206,6 +196,55 @@ function LeavingRequest() {
                       <CardContent sx={{ pt: 0 }}>
                         <Box sx={{ m: -1.5 }}>
                           <Grid container rowGap={2} columnGap={3}>
+                            <Grid xs={12} md={6}>
+                              <TextField
+                                fullWidth
+                                label="Request ID"
+                                name="request_id"
+                                required
+                                value={values.request_id}
+                                disabled={true}
+                                //   className={editable ? '' : 'disabled-text-field'}
+                              />
+                            </Grid>
+                            <Grid xs={12} md={6}>
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer
+                                  components={['DatePicker', 'DatePicker']}
+                                  sx={{ padding: '0px', overflow: 'visible' }}
+                                >
+                                  <DatePicker
+                                    label="Request Date"
+                                    value={request_date}
+                                    sx={{ width: '100%' }}
+                                    disabled={true}
+                                  />
+                                </DemoContainer>
+                              </LocalizationProvider>
+                            </Grid>
+                            <Grid xs={12} md={6}>
+                              <TextField
+                                fullWidth
+                                label="EmployeeID"
+                                name="employee_id"
+                                required
+                                value={values.employee_id}
+                                disabled={true}
+                                //   className={editable ? '' : 'disabled-text-field'}
+                              />
+                            </Grid>
+                            <Grid xs={12} md={12}>
+                              <TextField
+                                fullWidth
+                                label="Employee Name"
+                                name="employee_name"
+                                required
+                                value={values.employee_name}
+                                disabled={true}
+                                //   className={editable ? '' : 'disabled-text-field'}
+                              />
+                            </Grid>
+
                             <Grid xs={12} md={12} lg={12}>
                               <FormLabel
                                 sx={{
@@ -227,9 +266,8 @@ function LeavingRequest() {
                                 sx={{
                                   marginTop: '10px',
                                 }}
-                                onChange={handleChange}
-                                // value={values.reason}
-                                required
+                                value={values.reason}
+                                disabled={true}
                               />
                             </Grid>
 
@@ -241,13 +279,9 @@ function LeavingRequest() {
                                 >
                                   <DatePicker
                                     label="Request Date"
-                                    value={requestDate}
-                                    onChange={(newValue) => {
-                                      setRequestDate(
-                                        newValue.format('YYYY-MM-DD')
-                                      );
-                                    }}
+                                    value={leave_start_date}
                                     sx={{ width: '100%' }}
+                                    disabled={true}
                                   />
                                 </DemoContainer>
                               </LocalizationProvider>
@@ -257,11 +291,8 @@ function LeavingRequest() {
                                 fullWidth
                                 label="Number of Days"
                                 name="leave_day_count"
-                                onChange={handleChange}
                                 value={values.leave_day_count}
-                                required
-                                //   value={values.lastName}
-                                //   disabled={!editable}
+                                disabled={true}
                                 //   className={editable ? '' : 'disabled-text-field'}
                               />
                             </Grid>
@@ -271,12 +302,10 @@ function LeavingRequest() {
                                 label="Leaving Type"
                                 name="leave_type_id"
                                 required
+                                value={values.leave_type_id}
+                                disabled={true}
                                 select
                                 SelectProps={{ native: true }}
-                                onChange={handleChange}
-                                // value={'Annual'}
-                                //   disabled={!editable}
-                                //   className={editable ? '' : 'disabled-text-field'}
                               >
                                 {leave_type.map((option) => (
                                   <option
@@ -297,7 +326,7 @@ function LeavingRequest() {
                 <Grid xs={12} md={8}>
                   <Button
                     variant="contained"
-                    onClick={handleSubmit}
+                    onClick={handleChangeAccept}
                     sx={{
                       marginLeft: '20px',
                       backgroundColor: '#B514EE', // Set the initial background color
@@ -312,36 +341,31 @@ function LeavingRequest() {
                       //   display: editable ? 'flex' : 'none',
                     }}
                   >
-                    Request
+                    Accept
+                  </Button>
+
+                  {/* get space between buttons */}
+
+                  <Button
+                    variant="contained"
+                    onClick={handleChangeReject}
+                    sx={{
+                      marginLeft: '20px',
+                      backgroundColor: '#B514EE', // Set the initial background color
+                      ':hover': {
+                        backgroundColor: colors.purple[500], // Change background color on hover
+                      },
+                      ':active': {
+                        backgroundColor: colors.purple[700], // Change background color when active (clicked)
+                      },
+
+                      borderRadius: '20px',
+                      //   display: editable ? 'flex' : 'none',
+                    }}
+                  >
+                    Reject
                   </Button>
                 </Grid>
-                <box>
-                  <Typography variant="h4">Pending Leaves</Typography>
-                </box>
-                <br />
-                <div>
-                  <Grid container spacing={3}>
-                    <LeavesTable link={pendingLeaves} />
-                  </Grid>
-                </div>
-                <box>
-                  <Typography variant="h4">approved Leaves</Typography>
-                </box>
-                <br />
-                <div>
-                  <Grid container spacing={3}>
-                    <LeavesTable link={approvedLeaves} />
-                  </Grid>
-                </div>
-                <box>
-                  <Typography variant="h4">Rejected Leaves</Typography>
-                </box>
-                <br />
-                <div>
-                  <Grid container spacing={3}>
-                    <LeavesTable link={rejectedLeaves} />
-                  </Grid>
-                </div>
               </Stack>
             </Container>
           </Box>
@@ -351,4 +375,4 @@ function LeavingRequest() {
   );
 }
 
-export default LeavingRequest;
+export default AcceptPage;

@@ -20,7 +20,7 @@ const Table = (props) => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/sup/leave/accept/all/' + id)
+      .get('http://localhost:8000/sup/leave/approved/all/' + id)
       .then((res) => {
         setData(res.data);
       })
@@ -77,7 +77,6 @@ const Table = (props) => {
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
-                <th>Edit</th>
                 {headerGroup.headers.map((column) => (
                   <th {...column.getHeaderProps()}>
                     {column.render('Headers')}
@@ -91,7 +90,7 @@ const Table = (props) => {
               prepareRow(row);
               return (
                 <tr {...row.getRowProps()}>
-                  <td align="center">
+                  {/* <td align="center">
                     <IconButton
                       sx={{
                         backgroundColor: '#B514EE', // Set the initial background color
@@ -142,7 +141,7 @@ const Table = (props) => {
                         }}
                       />
                     </IconButton>
-                  </td>
+                  </td> */}
                   {row.cells.map((cell) => {
                     return (
                       <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
