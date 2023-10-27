@@ -125,6 +125,8 @@ CREATE TABLE IF NOT EXISTS `HRM`.`leave_requests` (
   `approved` TINYINT NOT NULL,
   `employee_id` CHAR(5) NOT NULL,
   `leave_type_id` INT NOT NULL,
+	  `request_date` DATETIME,
+	
   
    PRIMARY KEY (`request_id`),
 
