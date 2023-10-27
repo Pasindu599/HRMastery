@@ -754,6 +754,19 @@ CREATE  OR REPLACE VIEW hrm.profile_view AS
         hrm.employees.last_name AS last_name
     FROM
         hrm.employees;
+
+-- view 5
+
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `hrm`.`employee_paygrade` AS
+    SELECT 
+        `hrm`.`employees`.`employee_id` AS `employee_id`,
+        `hrm`.`employees`.`pay_grade_id` AS `pay_grade_id`
+    FROM
+        `hrm`.`employees`
         
 -- stored Procedures-----------------------------------------------------
 
