@@ -203,6 +203,10 @@ CREATE TABLE IF NOT EXISTS `HRM`.`user_accounts` (
    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
+ALTER TABLE `hrm`.`user_accounts` 
+ADD UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE;
+;
+
 
 -- -----------------------------------------------------
 -- Table `HRM`.`num_of_leaving_days`
