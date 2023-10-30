@@ -120,6 +120,7 @@ function LeavingRequest() {
         if (res.data.Status === true) {
           alert('Request Sent');
           // page refresh
+          window.location.reload();
         } else {
           alert('Request Failed');
         }
@@ -325,7 +326,7 @@ function LeavingRequest() {
                   </Grid>
                 </div>
                 <box>
-                  <Typography variant="h4">approved Leaves</Typography>
+                  <Typography variant="h4">Approved Leaves</Typography>
                 </box>
                 <br />
                 <div>

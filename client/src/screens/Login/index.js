@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import { BrowserRouter as Routers, Route, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// mui
+
 export default function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -126,7 +128,7 @@ export default function Login() {
                   fontSize: '5rem',
                 }}
               />
-              HRMaster
+              HRMastery
             </Typography>
             <Typography
               sx={{
