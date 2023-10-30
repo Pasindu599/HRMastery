@@ -32,6 +32,61 @@ router.get('/employee/details/:id', (req, res) => {
     });
 });
 
+router.get('/employee/details/pay_grade/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql =
+    'select pay_grade_id from employee_paygrade  where employee_id = ?';
+  // check this id is in the supervisor_id column in the employees table
+  const sql1 = 'select * from employees where supervisor_id = ?';
+  db.query(sql1, [emp_id])
+    .then((result) => {
+      if (result[0].length > 0) {
+        db.query(sql, [emp_id])
+          .then((result) => {
+            if (result[0][0].pay_grade_id === 1) {
+              return res.json({
+                Status: true,
+                level1: true,
+                isSupervisor: true,
+              });
+            } else {
+              return res.json({
+                Status: true,
+                level1: false,
+                isSupervisor: true,
+              });
+            }
+          })
+          .catch((err) => {
+            return res.json({ Status: false });
+          });
+      } else {
+        db.query(sql, [emp_id])
+          .then((result) => {
+            if (result[0][0].pay_grade_id === 1) {
+              return res.json({
+                Status: true,
+                level1: true,
+                isSupervisor: false,
+              });
+            } else {
+              return res.json({
+                Status: true,
+                level1: false,
+                isSupervisor: false,
+              });
+            }
+          })
+          .catch((err) => {
+            return res.json({ Status: false });
+          });
+      }
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
 router.get('/employee/custom-attributes/:id', (req, res) => {
   const defaultLableNames = [
     'employee_id',

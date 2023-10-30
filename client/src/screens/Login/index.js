@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import { BrowserRouter as Routers, Route, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// mui
+
 export default function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -25,7 +27,6 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const data = {
       username: username,
       password: password,
@@ -71,7 +72,7 @@ export default function Login() {
   };
 
   return (
-    <Grid
+    <Grid // React mui material ui   // css   // html
       component="container"
       maxWidth="lg"
       sx={{
@@ -127,7 +128,7 @@ export default function Login() {
                   fontSize: '5rem',
                 }}
               />
-              HRMaster
+              HRMastery
             </Typography>
             <Typography
               sx={{

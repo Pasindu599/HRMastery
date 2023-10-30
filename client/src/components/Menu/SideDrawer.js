@@ -28,6 +28,7 @@ import { purple, lime } from '@mui/material/colors';
 import { makeStyles } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const drawerWidth = 300;
 
@@ -54,11 +55,45 @@ export default function SideDrawer(props) {
   const [drawerBackground, setDrawerBackground] = React.useState('#B514EE'); // Initialize background color
 
   const [openList, setOpenList] = React.useState(false);
+  const [allEmployeeView, setAllEmployeeView] = React.useState(false);
+  const [approveLeaveView, setApproveLeaveView] = React.useState(false);
+  const [reportView, setReportView] = React.useState(false);
+  const [customAttributeView, setCustomAttributeView] = React.useState(false);
+  // const [settingsView, setSettingsView] = React.useState(false);
+  // const [logoutView, setLogoutView] = React.useState(false);
+  const [acceptLeaveView, setAcceptLeaveView] = React.useState(false);
 
   // const handleBackgroundChange = () => {
   //   // Change the background color when the button is clicked
   //   setDrawerBackground('#343A40');
   // };
+  React.useEffect(() => {
+    axios
+      .get(`http://localhost:8000/emp/employee/details/pay_grade/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.isSupervisor === true) {
+          setApproveLeaveView(true);
+        } else if (res.data.isSupervisor === false) {
+          setAcceptLeaveView(true);
+        }
+
+        if (role === 'Admin') {
+          setAllEmployeeView(true);
+          setReportView(true);
+          setCustomAttributeView(true);
+        } else if (role === 'HR') {
+          setAllEmployeeView(true);
+          setReportView(true);
+          setCustomAttributeView(true);
+        } else if (role === 'Employee' && res.data.level1 === false) {
+          setAllEmployeeView(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleClick = () => {
     setOpenList(!openList);
@@ -150,7 +185,9 @@ export default function SideDrawer(props) {
                 </ListItemButton>
               </List>
             </Collapse> */}
-            <ListItem sx={{ padding: '2' }}>
+            <ListItem
+              sx={{ padding: '2', display: allEmployeeView ? 'block' : 'none' }}
+            >
               <ListItemButton
                 component="a"
                 onClick={() => {
@@ -162,7 +199,7 @@ export default function SideDrawer(props) {
                 sx={{
                   color: 'inherit',
                   borderRadius: '20px',
-
+                  display: allEmployeeView ? 'flex' : 'none',
                   backgroundColor: drawerBackground,
                 }}
               >
@@ -171,7 +208,11 @@ export default function SideDrawer(props) {
                 </ListItemIcon>
                 <ListItemText
                   primary="All Employees"
-                  sx={{ marginRight: 4, color: 'inherit' }}
+                  sx={{
+                    marginRight: 4,
+                    color: 'inherit',
+                    display: allEmployeeView ? 'flex' : 'none',
+                  }}
                 />
               </ListItemButton>
             </ListItem>
@@ -195,15 +236,20 @@ export default function SideDrawer(props) {
                 />
               </ListItemButton>
             </ListItem>
-            <ListItem sx={{ padding: '2' }}>
+            <ListItem
+              sx={{
+                padding: '2',
+                display: approveLeaveView ? 'block' : 'none',
+              }}
+            >
               <ListItemButton
                 component="a"
                 href="#Report"
                 sx={{
                   color: 'inherit',
                   borderRadius: '20px',
-
                   backgroundColor: drawerBackground,
+                  display: approveLeaveView ? 'flex' : 'none',
                 }}
                 onClick={() => {
                   navigate('/leave-accept/' + role + '/' + id + '/', {
@@ -216,31 +262,48 @@ export default function SideDrawer(props) {
                 </ListItemIcon>
                 <ListItemText
                   primary="Approve Leaves"
-                  sx={{ marginRight: 4, color: 'inherit' }}
+                  sx={{
+                    marginRight: 4,
+                    color: 'inherit',
+                    display: approveLeaveView ? 'flex' : 'none',
+                  }}
                 />
               </ListItemButton>
             </ListItem>
-            <ListItem sx={{ padding: '2' }}>
+            <ListItem
+              sx={{ padding: '2', display: reportView ? 'block' : 'none' }}
+            >
               <ListItemButton
                 component="a"
                 href="#Report"
                 sx={{
                   color: 'inherit',
                   borderRadius: '20px',
-
+                  display: reportView ? 'flex' : 'none',
                   backgroundColor: drawerBackground,
                 }}
               >
-                <ListItemIcon sx={{ marginLeft: 4 }}>
+                <ListItemIcon
+                  sx={{ marginLeft: 4, display: reportView ? 'flex' : 'none' }}
+                >
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Report"
-                  sx={{ marginRight: 4, color: 'inherit' }}
+                  sx={{
+                    marginRight: 4,
+                    color: 'inherit',
+                    display: reportView ? 'flex' : 'none',
+                  }}
                 />
               </ListItemButton>
             </ListItem>
-            <ListItem sx={{ padding: '2' }}>
+            <ListItem
+              sx={{
+                padding: '2',
+                display: customAttributeView ? 'block' : 'none',
+              }}
+            >
               <ListItemButton
                 component="a"
                 sx={{
@@ -248,6 +311,7 @@ export default function SideDrawer(props) {
                   borderRadius: '20px',
 
                   backgroundColor: drawerBackground,
+                  display: customAttributeView ? 'flex' : 'none',
                 }}
                 onClick={() => {
                   navigate('/custom-attributes/' + role + '/' + id + '/', {
@@ -255,12 +319,21 @@ export default function SideDrawer(props) {
                   });
                 }}
               >
-                <ListItemIcon sx={{ marginLeft: 4 }}>
+                <ListItemIcon
+                  sx={{
+                    marginLeft: 4,
+                    display: customAttributeView ? 'flex' : 'none',
+                  }}
+                >
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Custom Attributes"
-                  sx={{ marginRight: 4, color: 'inherit' }}
+                  sx={{
+                    marginRight: 4,
+                    color: 'inherit',
+                    display: customAttributeView ? 'block' : 'none',
+                  }}
                 />
               </ListItemButton>
             </ListItem>

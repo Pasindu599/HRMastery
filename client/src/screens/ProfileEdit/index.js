@@ -22,16 +22,16 @@ function EditProfile(children) {
   console.log('ProfileEdit');
 
   const [edit, setEdit] = useState(false);
-  const [editButton, setEditButton] = useState(false);
+  const [editButton, setEditButton] = useState(true);
 
   // set editable to true or false
-  useEffect(() => {
-    if (role === 'Admin' || role === 'HR') {
-      setEditButton(true);
-    } else {
-      setEditButton(false);
-    }
-  }, [role]);
+  // useEffect(() => {
+  //   if (role === 'Admin' || role === 'HR') {
+  //     setEditButton(true);
+  //   } else {
+  //     setEditButton(false);
+  //   }
+  // }, [role]);
 
   const handleEdit = () => {
     setEdit(true);

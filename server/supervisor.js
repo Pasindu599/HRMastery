@@ -81,18 +81,6 @@ router.get('/leave/approved/all/:id', (req, res) => {
     });
 });
 
-router.get('/leave/pending/emp/:id', (req, res) => {
-  const emp_id = req.params.id;
-  const sql = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 0`;
-  db.query(sql, [emp_id])
-    .then((result) => {
-      return res.json(result[0]);
-    })
-    .catch((err) => {
-      return res.json({ Status: false });
-    });
-});
-
 // update the accept of the leave request
 router.put('/leave/accept/:leaveId', (req, res) => {
   const sql = 'update leave_requests set approved = 1 where request_id = ?';
