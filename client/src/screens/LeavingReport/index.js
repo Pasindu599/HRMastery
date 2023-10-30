@@ -27,6 +27,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import LeavesTable from '../../components/Table/PendingLeaves';
 import { pendingLeaves, approvedLeaves, rejectedLeaves } from './axios';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const leave_type = [
   {
@@ -48,7 +50,8 @@ const leave_type = [
 ];
 
 function LeavingRequest() {
-  const { id } = useParams();
+  const navigate = useNavigate();
+  const { role, id } = useParams();
   const [requestDate, setRequestDate] = React.useState(null);
   const [values, setValues] = useState({
     reason: '',
@@ -57,6 +60,29 @@ function LeavingRequest() {
     employee_id: id,
     leave_type_id: '',
   });
+
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    axios
+      .get('http://localhost:8000/api/')
+      .then((res) => {
+        if (
+          res.data.valid === true &&
+          res.data.role === role &&
+          res.data.employee_id === id
+        ) {
+          setUser({
+            username: res.data.username,
+          });
+        } else {
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleChange = useCallback((event) => {
     setValues((prevState) => ({

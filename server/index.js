@@ -2,7 +2,31 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
-app.use(cors());
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+
+app.use(cookieParser());
+app.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      maxAge: 1000 * 60 * 60, // one day in ms
+    },
+  })
+);
+app.use(bodyParser.json());
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 const db = require('./database'),

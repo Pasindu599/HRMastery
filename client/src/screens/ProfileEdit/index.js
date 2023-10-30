@@ -24,14 +24,30 @@ function EditProfile(children) {
   const [edit, setEdit] = useState(false);
   const [editButton, setEditButton] = useState(true);
 
-  // set editable to true or false
-  // useEffect(() => {
-  //   if (role === 'Admin' || role === 'HR') {
-  //     setEditButton(true);
-  //   } else {
-  //     setEditButton(false);
-  //   }
-  // }, [role]);
+  axios.defaults.withCredentials = true;
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    axios
+      .get('http://localhost:8000/api/')
+      .then((res) => {
+        if (
+          res.data.valid === true &&
+          res.data.role === role &&
+          res.data.employee_id === id
+        ) {
+          setUser({
+            username: res.data.username,
+          });
+        } else {
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleEdit = () => {
     setEdit(true);
