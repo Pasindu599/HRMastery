@@ -15,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Engineering } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const settings = ['Profile', 'Logout'];
 
@@ -39,7 +40,13 @@ function Header() {
     setAnchorElUser(null);
 
     if (e.target.textContent === 'Logout') {
-      window.location.href = '/';
+      axios.post('http://localhost:8000/api/logout').then((res) => {
+        console.log(res);
+        if (res.data.Status === 'Success') {
+          console.log(res);
+          navigate('/', { replace: true });
+        }
+      });
     }
 
     if (e.target.textContent === 'Profile') {

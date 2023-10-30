@@ -22,6 +22,28 @@ function LeaveAccept(children) {
   const navigate = useNavigate();
   const { role, id } = useParams();
   console.log('role', role, 'id', id);
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    axios
+      .get('http://localhost:8000/api/')
+      .then((res) => {
+        if (
+          res.data.valid === true &&
+          res.data.role === role &&
+          res.data.employee_id === id
+        ) {
+          setUser({
+            username: res.data.username,
+          });
+        } else {
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    window.scrollTo(0, 0);
+  }, []);
 
   // set editable to true or false
 

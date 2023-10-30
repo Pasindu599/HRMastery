@@ -377,7 +377,15 @@ export default function SideDrawer(props) {
                   primary="Log Out"
                   sx={{ marginRight: 4, color: 'inherit' }}
                   onClick={() => {
-                    navigate('/', { replace: true });
+                    axios
+                      .post('http://localhost:8000/api/logout')
+                      .then((res) => {
+                        console.log(res);
+                        if (res.data.Status === 'Success') {
+                          console.log(res);
+                          navigate('/', { replace: true });
+                        }
+                      });
                   }}
                 />
               </ListItemButton>

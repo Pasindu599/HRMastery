@@ -10,6 +10,7 @@ import { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { BrowserRouter as Routers, Route, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useEffect } from 'react';
 
 // mui
 
@@ -24,6 +25,26 @@ export default function Login() {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
+
+  axios.defaults.withCredentials = true;
+  useEffect(() => {
+    axios
+      .get('http://localhost:8000/api/')
+      .then((res) => {
+        if (res.data.valid === true) {
+          const employee_role = res.data.role;
+          const employee_data = res.data;
+          navigate(
+            'profile/' + employee_role + '/' + employee_data.employee_id + '/'
+          );
+        } else {
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
