@@ -756,11 +756,6 @@ CREATE  OR REPLACE VIEW hrm.profile_view AS
         hrm.employees;
 
 -- view 5
-
-CREATE 
-    ALGORITHM = UNDEFINED 
-    DEFINER = `root`@`localhost` 
-    SQL SECURITY DEFINER
 VIEW `hrm`.`employee_paygrade` AS
     SELECT 
         `hrm`.`employees`.`employee_id` AS `employee_id`,
