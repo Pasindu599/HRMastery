@@ -658,7 +658,7 @@ DETERMINISTIC
 READS SQL DATA
 BEGIN
  DECLARE available_days integer;
- SELECT remaining_days INTO available_days FROM remaining_leaving_days WHERE remaining_leaving_days.leave_type_id=leave_type_id AND remaining_leaving_days.employee_id=employee_id;
+ SELECT remaining_days INTO available_days FROM remaining_leaving_days r WHERE r.leave_type_id=leave_type_id AND r.employee_id=employee_id;
  IF requested_no_of_leaves > available_days THEN 
 	RETURN 0;
  ELSE
