@@ -13,6 +13,7 @@ import OtherProfile from './screens/ProfileEdit/otherProfile';
 import LeaveAccept from './screens/LeaveToAccept/leaveAccept';
 import AcceptPage from './screens/LeavingReport/acceptPage';
 import CustomAttributes from './screens/CustomAttributes';
+import Report from './screens/Report/index';
 
 const USER_TYPE = {
   ADMIN: 'admin',
@@ -50,6 +51,7 @@ function App() {
         path="/custom-attributes/:role/:id"
         element={<CustomAttributes />}
       />
+      <Route path="/report/:role/:id" element={<Report />} />
 
       <Route path="*" element={<div>Page Not Found</div>} />
     </Routes>

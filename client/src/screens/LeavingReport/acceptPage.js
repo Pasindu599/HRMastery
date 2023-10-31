@@ -26,6 +26,7 @@ import { colors } from '@mui/material';
 import { Navigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const leave_type = [
   {
@@ -48,7 +49,10 @@ const leave_type = [
 
 function AcceptPage() {
   const navigate = useNavigate();
-  const { otherid, id, role } = useParams();
+  const location = useLocation();
+
+  const { id, role } = useParams();
+  const otherid = location.state.request_id;
   const [leave_start_date, setLeaveStartDate] = React.useState(null);
   const [request_date, setRequestDate] = React.useState(null);
   const [values, setValues] = useState({
@@ -86,7 +90,7 @@ function AcceptPage() {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/emp/employee/leaving-request/to-accept/${otherid}`
+        `http://localhost:8000/emp/employee-sup/leaving-request/to-accept/${otherid}`
       )
       .then((res) => {
         console.log(res.data.data[0]);
@@ -94,11 +98,11 @@ function AcceptPage() {
           reason: res.data.data[0].reason,
           leave_day_count: res.data.data[0].leave_day_count,
           approved: res.data.data[0].approved,
-          employee_id: otherid,
+          employee_id: res.data.data[0].employee_id,
           leave_type_id: res.data.data[0].leave_type_id,
           employee_name:
             res.data.data[0].first_name + ' ' + res.data.data[0].last_name,
-          request_id: res.data.data[0].request_id,
+          request_id: otherid,
         });
         setLeaveStartDate(dayjs(res.data.data[0].leave_start_date));
         setRequestDate(dayjs(res.data.data[0].request_date));

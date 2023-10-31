@@ -251,6 +251,19 @@ router.get('/employee/leaving-request/to-accept/:id', (req, res) => {
     });
 });
 
+router.get('/employee-sup/leaving-request/to-accept/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql =
+    'select * from leave_requests l join employees e on l.employee_id = e.employee_id  where  l.request_id= ?';
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json({ Status: true, data: result[0] });
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
 router.get('/employee/leaving-count/:id', (req, res) => {
   const emp_id = req.params.id;
   const sql =
@@ -266,7 +279,7 @@ router.get('/employee/leaving-count/:id', (req, res) => {
 
 router.get('/leave/pending/:id', (req, res) => {
   const emp_id = req.params.id;
-  const sql = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 0`;
+  const sql = `select request_id, employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 0`;
   db.query(sql, [emp_id])
     .then((result) => {
       return res.json(result[0]);
@@ -278,7 +291,7 @@ router.get('/leave/pending/:id', (req, res) => {
 
 router.get('/leave/accepted/:id', (req, res) => {
   const emp_id = req.params.id;
-  const sql = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 1`;
+  const sql = `select request_id,employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 1`;
   db.query(sql, [emp_id])
     .then((result) => {
       return res.json(result[0]);
@@ -290,7 +303,7 @@ router.get('/leave/accepted/:id', (req, res) => {
 
 router.get('/leave/rejected/:id', (req, res) => {
   const emp_id = req.params.id;
-  const sql = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 2`;
+  const sql = `select request_id,employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count , DATE_FORMAT(request_date, '%Y-%m-%d') AS request_date from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id = ? and approved = 2`;
   db.query(sql, [emp_id])
     .then((result) => {
       return res.json(result[0]);
@@ -432,6 +445,44 @@ router.post('/employee/update/:id', async (req, res) => {
     .catch((err) => {
       console.log('jkhkj');
       return res.json({ Status: false, customAttributesFalse: false });
+    });
+});
+
+// report generation
+
+router.get('/report/emp_dep/:dept_id', (req, res) => {
+  const dept_id = req.params.dept_id;
+  const sql = `select employee_id, first_name, last_name from employees where department_id = ?`;
+  db.query(sql, [dept_id])
+    .then((result) => {
+      return res.json(result[0]);
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+router.get('/report/emp_dep/:pay_grade_id', (req, res) => {
+  const pay_grade_id = req.params.dept_id;
+  const sql = `select employee_id, first_name, last_name from employees where pay_grade_id = ?`;
+  db.query(sql, [pay_grade_id])
+    .then((result) => {
+      return res.json(result[0]);
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+router.get('/report/total_leaves/:dept_id', (req, res) => {
+  const dept_id = req.params.dept_id;
+  const sql = `select get_total_leaving_count(?) as result`;
+  db.query(sql, [dept_id])
+    .then((result) => {
+      return res.json(result[0]);
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
     });
 });
 

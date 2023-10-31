@@ -25,7 +25,8 @@ import { useParams } from 'react-router-dom';
 
 export const AccountProfileDetails = (props) => {
   const { role, id } = useParams();
-  const { editable } = props;
+  const { editable, isLevel1 } = props;
+  console.log(isLevel1);
 
   const gender = [
     {
@@ -340,7 +341,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChange}
                   required
                   value={values.firstName}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -352,7 +353,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChange}
                   required
                   value={values.lastName}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -369,7 +370,7 @@ export const AccountProfileDetails = (props) => {
                         setBirthday(newValue);
                       }}
                       sx={{ width: '100%' }}
-                      disabled={!editable}
+                      disabled={isLevel1 ? true : !editable}
                       className={editable ? '' : 'disabled-text-field'}
                     />
                   </DemoContainer>
@@ -385,7 +386,7 @@ export const AccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={values.gender}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {gender.map((option) => (
@@ -405,7 +406,7 @@ export const AccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={values.maritalStatus}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {maritalStatus.map((option) => (
@@ -535,7 +536,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.contact_name}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -547,7 +548,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.relationship}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -559,7 +560,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.phoneNumber}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -717,7 +718,7 @@ export const AccountProfileDetails = (props) => {
                     onChange={handleChangeCustomAttributeDeatils}
                     required
                     value={customAttributes[attribute]}
-                    disabled={!editable}
+                    disabled={isLevel1 ? true : !editable}
                     className={editable ? '' : 'disabled-text-field'}
                   />
                 </Grid>

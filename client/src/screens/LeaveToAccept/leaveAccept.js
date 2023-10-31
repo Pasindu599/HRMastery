@@ -22,6 +22,7 @@ function LeaveAccept(children) {
   const navigate = useNavigate();
   const { role, id } = useParams();
   console.log('role', role, 'id', id);
+  axios.defaults.withCredentials = true;
   const [user, setUser] = useState({});
   useEffect(() => {
     axios

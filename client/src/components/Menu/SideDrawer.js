@@ -244,7 +244,6 @@ export default function SideDrawer(props) {
             >
               <ListItemButton
                 component="a"
-                href="#Report"
                 sx={{
                   color: 'inherit',
                   borderRadius: '20px',
@@ -275,7 +274,6 @@ export default function SideDrawer(props) {
             >
               <ListItemButton
                 component="a"
-                href="#Report"
                 sx={{
                   color: 'inherit',
                   borderRadius: '20px',
@@ -294,6 +292,11 @@ export default function SideDrawer(props) {
                     marginRight: 4,
                     color: 'inherit',
                     display: reportView ? 'flex' : 'none',
+                  }}
+                  onClick={() => {
+                    navigate('/report/' + role + '/' + id + '/', {
+                      replace: true,
+                    });
                   }}
                 />
               </ListItemButton>
