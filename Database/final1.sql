@@ -774,7 +774,7 @@ DROP procedure IF EXISTS `hrm`.`UpdateEmployeeAndRelatedData`;
 
 DELIMITER $$
 USE `hrm`$$
-CREATE PROCEDURE `UpdateEmployeeAndRelatedData`(
+CREATE  PROCEDURE `UpdateEmployeeAndRelatedData`(
   IN employee_id CHAR(5),
   IN first_name VARCHAR(45),
   IN last_name VARCHAR(45),
@@ -792,7 +792,10 @@ CREATE PROCEDURE `UpdateEmployeeAndRelatedData`(
   IN username VARCHAR(45),
   IN password VARCHAR(75),
   IN user_email VARCHAR(45),
-  IN role_id INT
+  IN role_id INT,
+  IN dependent_name  VARCHAR(45),
+  IN dep_relationship  VARCHAR(45),
+  IN age INT
 )
 BEGIN
   START TRANSACTION;
@@ -829,6 +832,14 @@ SET
   `user_email` = user_email,
   `role_id` = role_id
 WHERE ua.employee_id = employee_id;
+
+UPDATE `HRM`.`dependents` ua
+SET
+  `dependent_name` = dependent_name,
+  `relationship` =  dep_relationship,
+  `age` = age
+  
+WHERE ua.employee_id = employee_id;
 	
   COMMIT;
   ROLLBACK; 
@@ -846,7 +857,6 @@ DROP procedure IF EXISTS `InsertEmployeeAndRelatedData`;
 USE `hrm`;
 DROP procedure IF EXISTS `hrm`.`InsertEmployeeAndRelatedData`;
 ;
-
 DELIMITER $$
 USE `hrm`$$
 CREATE  PROCEDURE `InsertEmployeeAndRelatedData`(
@@ -866,7 +876,10 @@ CREATE  PROCEDURE `InsertEmployeeAndRelatedData`(
   IN username VARCHAR(45) ,
   IN password VARCHAR(75),
   IN user_email VARCHAR(45),
-  IN role_id INT
+  IN role_id INT,
+  IN dependent_name VARCHAR(45),
+  IN dep_relationship VARCHAR(45),
+  IN dep_age INT
 )
 BEGIN
   DECLARE last_employee_id CHAR(5);
@@ -892,6 +905,11 @@ SELECT  GetLastEmployeeID() INTO last_employee_id;
     `username`, `password`, `user_email`, `employee_id`, `role_id`
   )
   VALUES (username, password, user_email, last_employee_id, role_id);
+  
+  INSERT INTO `HRM`.`dependents` (
+    `employee_id`, `dependent_name`, `relationship`, `age`
+  )
+  VALUES (last_employee_id, dependent_name, dep_relationship, dep_age);
 
   COMMIT;
 ROLLBACK; 
@@ -899,4 +917,3 @@ END$$
 
 DELIMITER ;
 ;
-
