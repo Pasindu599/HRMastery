@@ -94,7 +94,7 @@ function EditProfile(children) {
                 <div>
                   <Grid container spacing={3}>
                     <Grid xs={12} md={3.5} lg={3}>
-                      <AccountProfile></AccountProfile>
+                      <AccountProfile id={id}></AccountProfile>
                       <br />
                       <Button
                         fullWidth
