@@ -21,9 +21,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 export const ProfileAdd = (props) => {
+  const navigate = useNavigate();
   const { role, id } = useParams();
   const gender = [
     {
@@ -322,7 +323,7 @@ export const ProfileAdd = (props) => {
         if (res.data.Status === true) {
           console.log(res);
           alert('Employee Added Successfully');
-          window.location.reload();
+          navigate(`/all-employee/${role}/${id}/`);
         } else {
           alert('Error in Adding Employee');
         }

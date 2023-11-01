@@ -18,12 +18,7 @@ import Emp_PayGrade from './components/emp_paygrade';
 import { Tab } from '@mui/material';
 import { useCallback } from 'react';
 import { TextField } from '@mui/material';
-import {
-  emp_dep,
-  approvedLeaves,
-  rejectedLeaves,
-  emp_paygrade,
-} from './components/axios';
+import { emp_dep, emp_paygrade } from './components/axios';
 
 function EditProfile(children) {
   const deparments = [
