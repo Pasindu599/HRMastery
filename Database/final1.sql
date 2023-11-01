@@ -756,12 +756,12 @@ CREATE  OR REPLACE VIEW hrm.profile_view AS
         hrm.employees;
 
 -- view 5
-VIEW `hrm`.`employee_paygrade` AS
+CREATE  OR REPLACE VIEW  `hrm`.`employee_paygrade` AS
     SELECT 
         `hrm`.`employees`.`employee_id` AS `employee_id`,
         `hrm`.`employees`.`pay_grade_id` AS `pay_grade_id`
     FROM
-        `hrm`.`employees`
+        `hrm`.`employees`;
         
 -- stored Procedures-----------------------------------------------------
 
