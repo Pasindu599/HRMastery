@@ -153,7 +153,7 @@ function CustomAttributes() {
                               <TextField
                                 fullWidth
                                 // helperText={editable ? 'Please specify the first name' : ''}
-                                label="First name"
+                                label="Custom Attribute Name"
                                 name="customAttributeName"
                                 onChange={handleChange}
                                 required
