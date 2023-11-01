@@ -21,8 +21,8 @@ import axios from 'axios';
 //     "phone_number": "2148986860"
 // }
 
-export const AccountProfile = () => {
-  const { id } = useParams();
+export const AccountProfile = (props) => {
+  const { id } = props;
 
   const [user, setUser] = useState({});
 

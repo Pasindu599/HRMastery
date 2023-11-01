@@ -134,7 +134,9 @@ function OtherProfile(children) {
                 <div>
                   <Grid container spacing={3}>
                     <Grid xs={12} md={3.5} lg={3}>
-                      <AccountProfile>{location.state}</AccountProfile>
+                      <AccountProfile id={otherid}>
+                        {location.state}
+                      </AccountProfile>
                       <br />
                       <Button
                         fullWidth
