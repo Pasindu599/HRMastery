@@ -19,6 +19,7 @@ function NewEmployee(children) {
   const navigate = useNavigate();
 
   // set editable to true or false
+  axios.defaults.withCredentials = true;
   const [user, setUser] = useState({});
   useEffect(() => {
     axios

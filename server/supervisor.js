@@ -9,7 +9,7 @@ router.get('/leave/accept/all/:id', (req, res) => {
   const sql_1 = 'select * from employees where supervisor_id = ?';
   // find all leave_request where employee_id is in the above list
 
-  const sql_3 = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id in (?) and approved = 0`;
+  const sql_3 = `select request_id,employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id in (?) and approved = 0`;
   // get json data from the above query_3
 
   db.query(sql_1, [emp_id])
@@ -35,7 +35,7 @@ router.get('/leave/reject/all/:id', (req, res) => {
   const sql_1 = 'select * from employees where supervisor_id = ?';
   // find all leave_request where employee_id is in the above list
 
-  const sql_3 = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id in (?) and approved = 2`;
+  const sql_3 = `select request_id, employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id in (?) and approved = 2`;
   // get json data from the above query_3
 
   db.query(sql_1, [emp_id])
@@ -61,7 +61,7 @@ router.get('/leave/approved/all/:id', (req, res) => {
   const sql_1 = 'select * from employees where supervisor_id = ?';
   // find all leave_request where employee_id is in the above list
 
-  const sql_3 = `select employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id in (?) and approved = 1`;
+  const sql_3 = `select request_id,employee_id , reason, DATE_FORMAT(leave_start_date, '%Y-%m-%d') AS leave_start_date , leave_type, leave_day_count from leave_requests lr join leave_types l on lr.leave_type_id = l.leave_type_id  where employee_id in (?) and approved = 1`;
   // get json data from the above query_3
 
   db.query(sql_1, [emp_id])

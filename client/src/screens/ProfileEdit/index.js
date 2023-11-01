@@ -23,6 +23,7 @@ function EditProfile(children) {
 
   const [edit, setEdit] = useState(false);
   const [editButton, setEditButton] = useState(true);
+  const [isLevel1, setIsLevel1] = useState(false);
 
   axios.defaults.withCredentials = true;
   const [user, setUser] = useState({});
@@ -46,7 +47,20 @@ function EditProfile(children) {
         console.log(err);
       });
 
-    window.scrollTo(0, 0);
+    // }, []);
+
+    // React.useEffect(() => {
+    axios
+      .get(`http://localhost:8000/emp/employee/details/pay_grade/${id}`)
+      .then((res) => {
+        console.log(res.data.level1, 'hjkhkj');
+        if (role === 'Employee' && res.data.level1 === true) {
+          setIsLevel1(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const handleEdit = () => {
@@ -108,6 +122,7 @@ function EditProfile(children) {
                     <Grid xs={12} md={8} lg={8}>
                       <AccountProfileDetails
                         editable={edit}
+                        isLevel1={isLevel1}
                       ></AccountProfileDetails>
                     </Grid>
                   </Grid>

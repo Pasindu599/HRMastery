@@ -60,7 +60,7 @@ function LeavingRequest() {
     employee_id: id,
     leave_type_id: '',
   });
-
+  axios.defaults.withCredentials = true;
   const [user, setUser] = useState({});
   useEffect(() => {
     axios

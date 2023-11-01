@@ -15,6 +15,7 @@ import axios from 'axios';
 function AllEmployee() {
   const navigate = useNavigate();
   const { role, id } = useParams();
+  axios.defaults.withCredentials = true;
   const [user, setUser] = useState({});
   useEffect(() => {
     axios

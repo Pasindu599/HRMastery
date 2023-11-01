@@ -52,7 +52,7 @@ function CustomAttributes() {
     customAttributeName: '',
     customAttributeType: 'INT',
   });
-
+  axios.defaults.withCredentials = true;
   const [user, setUser] = useState({});
   useEffect(() => {
     axios

@@ -25,7 +25,8 @@ import { useParams } from 'react-router-dom';
 
 export const AccountProfileDetails = (props) => {
   const { role, id } = useParams();
-  const { editable } = props;
+  const { editable, isLevel1 } = props;
+  console.log(isLevel1);
 
   const gender = [
     {
@@ -158,6 +159,8 @@ export const AccountProfileDetails = (props) => {
   const [allEmployeeStatus, setAllEmployeeStatus] = useState([]);
   const [allJobTitles, setAllJobTitles] = useState([]);
 
+  const [oldPassword, setOldPassword] = useState('');
+
   const [values, setValues] = useState({
     firstName: '',
     lastName: '',
@@ -172,6 +175,11 @@ export const AccountProfileDetails = (props) => {
     contact_name: '',
     relationship: '',
     phoneNumber: '',
+  });
+  const [dependentValues, setDependentValues] = useState({
+    dependent_name: '',
+    dependent_relationship: '',
+    dependent_age: '',
   });
   const [DepartmentValues, setDepartmentValues] = useState({
     departmentName: '',
@@ -199,7 +207,7 @@ export const AccountProfileDetails = (props) => {
       await axios
         .get(`http://localhost:8000/emp/employee/details/${id}`)
         .then((response) => {
-          console.log(response.data.data[0], 'response.data.data[0]');
+          // console.log(response.data.data[0], 'response.data.data[0]');
           setAllDetails(response.data.data[0]);
           setValues({
             firstName: response.data.data[0].first_name,
@@ -229,12 +237,26 @@ export const AccountProfileDetails = (props) => {
       await axios
         .get(`http://localhost:8000/emp/employee/account/${id}`)
         .then((response) => {
-          console.log(response.data.data[0]);
+          console.log(response.data.data[0], 'response.data.data[0]');
           setAccountValues({
             username: response.data.data[0].username,
             password: response.data.data[0].password,
             email: response.data.data[0].user_email,
             role: response.data.data[0].role_id,
+          });
+          setOldPassword(response.data.data[0].password);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      // get dependent details
+      await axios
+        .get(`http://localhost:8000/emp/employee/dependent/${id}`)
+        .then((response) => {
+          setDependentValues({
+            dependent_name: response.data.data[0].dependent_name,
+            dependent_relationship: response.data.data[0].relationship,
+            dependent_age: response.data.data[0].age,
           });
         })
         .catch((error) => {
@@ -260,6 +282,14 @@ export const AccountProfileDetails = (props) => {
 
   const handleChangeContactDeatils = useCallback((event) => {
     setContactValues((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+  }, []);
+
+  // dependent details
+  const handleChangeDependentDeatils = useCallback((event) => {
+    setDependentValues((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
@@ -292,6 +322,8 @@ export const AccountProfileDetails = (props) => {
 
       birthdate: birthday.format('YYYY-MM-DD'),
       customAttributes: customAttributes,
+      ...dependentValues,
+      oldPassword: oldPassword,
     };
     console.log(data);
 
@@ -340,7 +372,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChange}
                   required
                   value={values.firstName}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -352,7 +384,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChange}
                   required
                   value={values.lastName}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -369,7 +401,7 @@ export const AccountProfileDetails = (props) => {
                         setBirthday(newValue);
                       }}
                       sx={{ width: '100%' }}
-                      disabled={!editable}
+                      disabled={isLevel1 ? true : !editable}
                       className={editable ? '' : 'disabled-text-field'}
                     />
                   </DemoContainer>
@@ -385,7 +417,7 @@ export const AccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={values.gender}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {gender.map((option) => (
@@ -405,7 +437,7 @@ export const AccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={values.maritalStatus}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {maritalStatus.map((option) => (
@@ -535,7 +567,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.contact_name}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -547,7 +579,7 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.relationship}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -559,7 +591,56 @@ export const AccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.phoneNumber}
-                  disabled={!editable}
+                  disabled={isLevel1 ? true : !editable}
+                  className={editable ? '' : 'disabled-text-field'}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </CardContent>
+        <br />
+        {/* dependent - details */}
+        <CardHeader
+          subheader={editable ? 'The information can be edited' : ''}
+          title="Dependent Information"
+        />
+        <CardContent sx={{ pt: 0 }}>
+          <Box sx={{ m: -1.5 }}>
+            <Grid container spacing={3}>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  // helperText={editable ? 'Please specify the first name' : ''}
+                  label="Name"
+                  name="dependent_name"
+                  onChange={handleChangeDependentDeatils}
+                  required
+                  value={dependentValues.dependent_name}
+                  disabled={isLevel1 ? true : !editable}
+                  className={editable ? '' : 'disabled-text-field'}
+                />
+              </Grid>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Relationship"
+                  name="dependent_relationship"
+                  onChange={handleChangeDependentDeatils}
+                  required
+                  value={dependentValues.dependent_relationship}
+                  disabled={isLevel1 ? true : !editable}
+                  className={editable ? '' : 'disabled-text-field'}
+                />
+              </Grid>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Age"
+                  name="dependent_age"
+                  onChange={handleChangeDependentDeatils}
+                  required
+                  value={dependentValues.dependent_age}
+                  disabled={isLevel1 ? true : !editable}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -717,7 +798,7 @@ export const AccountProfileDetails = (props) => {
                     onChange={handleChangeCustomAttributeDeatils}
                     required
                     value={customAttributes[attribute]}
-                    disabled={!editable}
+                    disabled={isLevel1 ? true : !editable}
                     className={editable ? '' : 'disabled-text-field'}
                   />
                 </Grid>
