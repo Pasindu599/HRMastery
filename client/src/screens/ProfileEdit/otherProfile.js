@@ -108,6 +108,22 @@ function OtherProfile(children) {
     }
   };
 
+  const handleDelete = () => {
+    axios
+      .delete(`http://localhost:8000/emp/employee/delete/${otherid}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.Status === true) {
+          console.log(res);
+          alert('Account Deleted');
+          navigate(`/all-employee/${role}/${id}/`);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <Home />
@@ -158,6 +174,28 @@ function OtherProfile(children) {
                         onClick={handleEdit}
                       >
                         Edit Profile Details
+                      </Button>
+                      <br />
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        sx={{
+                          backgroundColor: '#B514EE', // Set the initial background color
+
+                          '&:hover': {
+                            backgroundColor: '#B514EE', // Change background color on hover
+                          },
+
+                          ':active': {
+                            backgroundColor: '#B514EE', // Change background color when active (clicked)
+                          },
+
+                          borderRadius: '20px',
+                          display: editButton ? 'flex' : 'none',
+                        }}
+                        onClick={handleDelete}
+                      >
+                        Delete
                       </Button>
                     </Grid>
                     <Grid xs={10} md={0.5} lg={0.5}></Grid>

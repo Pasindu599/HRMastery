@@ -32,6 +32,19 @@ router.get('/employee/details/:id', (req, res) => {
     });
 });
 
+// delete employee from employee table
+router.delete('/employee/delete/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql = 'DELETE FROM employees WHERE employee_id = ?';
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json({ Status: true });
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
 router.get('/employee/details/pay_grade/:id', (req, res) => {
   const emp_id = req.params.id;
   const sql =
@@ -490,8 +503,9 @@ router.get('/report/emp_dep/:dept_id', (req, res) => {
     });
 });
 
-router.get('/report/emp_dep/:pay_grade_id', (req, res) => {
-  const pay_grade_id = req.params.dept_id;
+router.get('/report/pay_grade/:pay_grade_id', (req, res) => {
+  const pay_grade_id = req.params.pay_grade_id;
+  console.log(pay_grade_id);
   const sql = `select employee_id, first_name, last_name from employees where pay_grade_id = ?`;
   db.query(sql, [pay_grade_id])
     .then((result) => {
