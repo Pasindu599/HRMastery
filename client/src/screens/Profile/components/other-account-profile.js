@@ -201,6 +201,13 @@ export const OtherAccountProfileDetails = (props) => {
     relationship: '',
     phoneNumber: '',
   });
+
+  const [dependentValues, setDependentValues] = useState({
+    dependent_name: '',
+    dependent_relationship: '',
+    dependent_age: '',
+  });
+
   const [DepartmentValues, setDepartmentValues] = useState({
     departmentName: '',
   });
@@ -266,6 +273,20 @@ export const OtherAccountProfileDetails = (props) => {
         .catch((error) => {
           console.log(error);
         });
+
+      //dependent details
+      await axios
+        .get(`http://localhost:8000/emp/employee/dependent/${otherid}`)
+        .then((response) => {
+          setDependentValues({
+            dependent_name: response.data.data[0].dependent_name,
+            dependent_relationship: response.data.data[0].relationship,
+            dependent_age: response.data.data[0].age,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
 
     fetchData();
@@ -288,6 +309,14 @@ export const OtherAccountProfileDetails = (props) => {
 
   const handleChangeContactDeatils = useCallback((event) => {
     setContactValues((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+  }, []);
+
+  // dependent
+  const handleChangeDependentDeatils = useCallback((event) => {
+    setDependentValues((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
@@ -320,6 +349,7 @@ export const OtherAccountProfileDetails = (props) => {
 
       birthdate: birthday.format('YYYY-MM-DD'),
       customAttributes: customAttributes,
+      ...dependentValues,
     };
     console.log(data);
 
@@ -586,6 +616,55 @@ export const OtherAccountProfileDetails = (props) => {
                   required
                   value={contactValues.phoneNumber}
                   disabled={true}
+                  className={editable ? '' : 'disabled-text-field'}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </CardContent>
+        <br />
+        {/* dependent - details */}
+        <CardHeader
+          subheader={editable ? 'The information can be edited' : ''}
+          title="Dependent Information"
+        />
+        <CardContent sx={{ pt: 0 }}>
+          <Box sx={{ m: -1.5 }}>
+            <Grid container spacing={3}>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  // helperText={editable ? 'Please specify the first name' : ''}
+                  label="Name"
+                  name="dependent_name"
+                  onChange={handleChangeDependentDeatils}
+                  required
+                  value={dependentValues.dependent_name}
+                  disabled={editable && role !== other ? false : true}
+                  className={editable ? '' : 'disabled-text-field'}
+                />
+              </Grid>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Relationship"
+                  name="dependent_relationship"
+                  onChange={handleChangeDependentDeatils}
+                  required
+                  value={dependentValues.dependent_relationship}
+                  disabled={editable && role !== other ? false : true}
+                  className={editable ? '' : 'disabled-text-field'}
+                />
+              </Grid>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Age"
+                  name="dependent_age"
+                  onChange={handleChangeDependentDeatils}
+                  required
+                  value={dependentValues.dependent_age}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>

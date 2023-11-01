@@ -171,7 +171,9 @@ router.get('/employee/account/:id', (req, res) => {
   const sql =
     'SELECT * FROM user_accounts AS ua LEFT JOIN  user_account_roles AS uar ON ua.role_id = uar.role_id WHERE ua.employee_id = ?';
   db.query(sql, [emp_id])
-    .then((result) => {
+    .then(async (result) => {
+      console.log(result[0]);
+
       return res.json({ Status: true, data: result[0] });
     })
     .catch((err) => {
@@ -194,6 +196,20 @@ router.get('/employee/dependents/:id', (req, res) => {
 router.get('/employee/profile-view/:id', (req, res) => {
   const emp_id = req.params.id;
   const sql = 'SELECT * FROM profile_view where employee_id = ?';
+  db.query(sql, [emp_id])
+    .then((result) => {
+      return res.json({ Status: true, data: result[0] });
+    })
+    .catch((err) => {
+      return res.json({ Status: false });
+    });
+});
+
+// get dependent_details
+
+router.get('/employee/dependent/:id', (req, res) => {
+  const emp_id = req.params.id;
+  const sql = 'SELECT * FROM dependents where employee_id = ?';
   db.query(sql, [emp_id])
     .then((result) => {
       return res.json({ Status: true, data: result[0] });
@@ -321,7 +337,7 @@ router.post('/employee/add/', async (req, res) => {
   console.log(hashedPassword);
 
   const sql1 =
-    'CALL InsertEmployeeAndRelatedData( ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?, ?, ?, ?, ?,?)';
+    'CALL InsertEmployeeAndRelatedData( ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?, ?, ?, ?, ?,?,?,?,?)';
 
   // update the custom attributes of the employee table'
   const sql2 = 'UPDATE employees SET ? WHERE employee_id = ?';
@@ -351,6 +367,9 @@ router.post('/employee/add/', async (req, res) => {
     hashedPassword,
     req.body.email,
     parseInt(req.body.role),
+    req.body.dependent_name,
+    req.body.dependent_relationship,
+    parseInt(req.body.dependent_age),
   ];
 
   console.log(employee);
@@ -385,12 +404,18 @@ router.post('/employee/add/', async (req, res) => {
 
 // update the employee details
 router.post('/employee/update/:id', async (req, res) => {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(req.body.password, salt);
-  console.log(hashedPassword);
+  let hashedPassword;
+  console.log(req.body.oldPassword, req.body.password, 'hgjh');
+  if (req.body.oldPassword !== req.body.password) {
+    const salt = await bcrypt.genSalt(10);
+    hashedPassword = await bcrypt.hash(req.body.password, salt);
+    console.log(hashedPassword);
+  } else {
+    hashedPassword = req.body.password;
+  }
   const emp_id = req.params.id;
   const sql1 =
-    'CALL UpdateEmployeeAndRelatedData( ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?, ?, ?, ?, ?,?,?)';
+    'CALL UpdateEmployeeAndRelatedData( ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?, ?, ?, ?, ?,?,?,?,?,?)';
   const sql2 = 'UPDATE employees SET ? WHERE employee_id = ?';
 
   const sqlString = objectToSQLUpdateString(req.body.customAttributes);
@@ -415,6 +440,9 @@ router.post('/employee/update/:id', async (req, res) => {
     hashedPassword,
     req.body.email,
     parseInt(req.body.role),
+    req.body.dependent_name,
+    req.body.dependent_relationship,
+    parseInt(req.body.dependent_age),
   ];
   console.log(employee);
   console.log(Object.keys(req.body.customAttributes).length, 'custom');

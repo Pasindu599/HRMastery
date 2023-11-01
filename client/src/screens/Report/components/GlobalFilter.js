@@ -14,7 +14,7 @@ const GlobalFilter = ({ filter, setFilter }) => {
     <span>
       {/* <input value={filter || ''} onChange={(e) => setFilter(e.target.value)} /> */}
       <OutlinedInput
-        value={filter || ''}
+        value={filter || '$$$$$$$$$$$$$$$$$$$$$$$'}
         onChange={(e) => setFilter(e.target.value)}
         defaultValue=""
         fullWidth
