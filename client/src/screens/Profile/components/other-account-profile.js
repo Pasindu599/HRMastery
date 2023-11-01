@@ -398,7 +398,7 @@ export const OtherAccountProfileDetails = (props) => {
                   onChange={handleChange}
                   required
                   value={values.firstName}
-                  disabled={true}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -410,7 +410,7 @@ export const OtherAccountProfileDetails = (props) => {
                   onChange={handleChange}
                   required
                   value={values.lastName}
-                  disabled={true}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -425,7 +425,7 @@ export const OtherAccountProfileDetails = (props) => {
                       value={birthday}
                       onChange={(newValue) => setBirthday(newValue)}
                       sx={{ width: '100%' }}
-                      disabled={true}
+                      disabled={editable && role !== other ? false : true}
                       className={editable ? '' : 'disabled-text-field'}
                     />
                   </DemoContainer>
@@ -441,7 +441,7 @@ export const OtherAccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={values.gender}
-                  disabled={true}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {gender.map((option) => (
@@ -461,7 +461,7 @@ export const OtherAccountProfileDetails = (props) => {
                   select
                   SelectProps={{ native: true }}
                   value={values.maritalStatus}
-                  disabled={true}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 >
                   {maritalStatus.map((option) => (
@@ -591,7 +591,7 @@ export const OtherAccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.contact_name}
-                  disabled={true}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -603,7 +603,7 @@ export const OtherAccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.relationship}
-                  disabled={true}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>
@@ -615,7 +615,7 @@ export const OtherAccountProfileDetails = (props) => {
                   onChange={handleChangeContactDeatils}
                   required
                   value={contactValues.phoneNumber}
-                  disabled={true}
+                  disabled={editable && role !== other ? false : true}
                   className={editable ? '' : 'disabled-text-field'}
                 />
               </Grid>

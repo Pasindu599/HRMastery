@@ -109,7 +109,7 @@ function EditProfile(children) {
                   <box>
                     <Typography variant="h4">
                       {' '}
-                      Employee by department
+                      Employee by Department
                     </Typography>
                   </box>
                   <br />
@@ -193,10 +193,7 @@ function EditProfile(children) {
                     </Grid>
                   </Grid>
                   <box>
-                    <Typography variant="h4">
-                      {' '}
-                      Employee by department
-                    </Typography>
+                    <Typography variant="h4"> Employee by Pay Grade</Typography>
                   </box>
                   <br />
                   <Grid container spacing={3}>
