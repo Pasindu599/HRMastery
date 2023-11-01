@@ -520,26 +520,26 @@ VALUES
 INSERT INTO `employees` (`first_name`, `last_name`, `gender`, `birthdate`,`marital_status`, `supervisor_id`, `department_id`, `pay_grade_id`, `employee_status_id`, `job_title_id`)
 VALUES
 ('Chamari', 'Fernando', 'female', '1989-05-07', 1, 'A0002', 1, 3, 4, 2),
-('Dinuka', 'Perera', 'male', '1990-11-15', 0, 'A0001', 1, 1, 5, 1),
-('Isuri', 'Silva', 'female', '1986-04-20', 1, 'A0002', 2, 2, 2, 1),
-('Janith', 'Karunaratne', 'male', '1992-03-03', 0, 'A0002', 3, 4, 5, 2),
+('Dinuka', 'Perera', 'male', '1990-11-15', 0, 'A0001', 1, 4, 5, 1),
+('Isuri', 'Silva', 'female', '1986-04-20', 1, 'A0002', 2, 2, 2, 2),
+('Janith', 'Karunaratne', 'male', '1992-03-03', 0, 'A0002', 3, 2, 5, 2),
 ('Nethmi', 'Ratnayake', 'female', '1993-08-18', 1, 'A0002', 1, 2, 1, 3),
 ('Pasan', 'Jayawardena', 'male', '1987-12-29', 0, 'A0003', 2, 1, 5, 3),
 ('Dimalsha', 'Wijeratne', 'female', '1988-07-09', 1, 'A0003', 3, 3, 2, 2),
-('Sahan', 'Bandara', 'male', '1985-01-26', 0, 'A0002', 1, 4, 4, 3),
+('Sahan', 'Bandara', 'male', '1985-01-26', 0, 'A0002', 1, 3, 4, 3),
 ('Sanduni', 'Perera', 'female', '1989-10-03', 1, 'A0004', 2, 1, 3, 4),
-('Lahiru', 'Dissanayake', 'male', '1986-06-17', 0, 'A0003', 3, 2, 6, 1),
+('Lahiru', 'Dissanayake', 'male', '1986-06-17', 0, 'A0003', 3, 2, 6, 3),
 ('Chathuri', 'Gunasekara', 'female', '1990-03-22', 1, 'A0002', 1, 3, 1, 2),
-('Nisal', 'Samarasekera', 'male', '1991-09-11', 0, 'A0003', 2, 4, 2, 3),
+('Nisal', 'Samarasekera', 'male', '1991-09-11', 0, 'A0003', 2, 3, 2, 3),
 ('Shanika', 'Mendis', 'female', '1992-04-07', 1, 'A0004', 3, 1, 5, 4),
-('Sankalpa', 'Wickramasinghe', 'male', '1988-08-16', 0, 'A0004', 1, 2, 6, 1),
+('Sankalpa', 'Wickramasinghe', 'male', '1988-08-16', 0, 'A0004', 1, 2, 6, 4),
 ('Thisari', 'Jayasundara', 'female', '1987-11-24', 1, 'A0003', 2, 3, 3, 2),
-('Ashen', 'Senanayake', 'male', '1993-02-12', 0, 'A0004', 3, 4, 4, 3),
+('Ashen', 'Senanayake', 'male', '1993-02-12', 0, 'A0004', 3, 3, 4, 3),
 ('Kavindya', 'Alwis', 'female', '1986-10-28', 1, 'A0003', 1, 1, 2, 4),
-('Milinda', 'Rajapaksa', 'male', '1985-05-05', 0, 'A0003', 2, 2, 1, 1),
+('Milinda', 'Rajapaksa', 'male', '1985-05-05', 0, 'A0003', 2, 2, 1, 2),
 ('Ruvini', 'Peris', 'female', '1989-09-09', 1, 'A0004', 3, 3, 5, 2),
-('Buddhika', 'Kodikara', 'male', '1990-07-15', 0, 'A0003', 1, 4, 6, 3),
-('Dinuka', 'Perera', 'male', '1980-11-15', 0, 'A0003', 3, 1, 4, 1);
+('Buddhika', 'Kodikara', 'male', '1990-07-15', 0, 'A0003', 1, 3, 6, 3),
+('Dinuka', 'Perera', 'male', '1980-11-15', 0, 'A0003', 3, 1, 4, 4);
 
 -- user accounts
 INSERT INTO `HRM`.`user_accounts` (`username`, `password`, `user_email`, `employee_id`, `role_id`)
