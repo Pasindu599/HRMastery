@@ -81,123 +81,105 @@ function EditProfile(children) {
     <>
       <Home />
       <Box sx={{ display: 'flex' }}>
-        <SideDrawer></SideDrawer>
+        <SideDrawer />
         <Box
           component="main"
           sx={{ flexGrow: 1, p: 3, backgroundColor: '#F8E5FF' }}
         >
-          {/* <DrawerHeader /> */}
-          <Box
-            component="main"
-            sx={{
-              flexGrow: 1,
-              py: 8,
-            }}
-          >
+          <Box component="main" sx={{ flexGrow: 1, py: 4 }}>
             <Container maxWidth="lg">
-              <Stack spacing={4}>
-                <box>
-                  <Typography variant="h4">Report</Typography>
-                </box>
-                <br />
-                <div>
-                  <box>
-                    <Typography variant="h4">
-                      {' '}
+              <Typography variant="h3" sx={{ mb: 4, fontWeight: 600 }}>
+                Reports Dashboard
+              </Typography>
+
+              <Grid container spacing={4}>
+                {/* Employee by Department Section */}
+                <Grid item xs={12}>
+                  <Card sx={{ p: 3, boxShadow: 3 }}>
+                    <Typography variant="h4" sx={{ mb: 3, fontWeight: 500 }}>
                       Employee by Department
                     </Typography>
-                  </box>
-                  <br />
-                  <Grid container spacing={3}>
-                    <Emp_Department link={emp_dep} />
-                  </Grid>
-                  <br />
-                  <box>
-                    <Typography variant="h4">
-                      {' '}
-                      Total leaves in given period by department
-                    </Typography>
-                  </box>
-                  <Grid
-                    display={'flex'}
-                    sx={{
-                      margin: '20px',
-                      //   justifyContent: 'space-between',
-                    }}
-                  >
-                    <Grid xs={12} md={6}>
-                      <TextField
-                        fullWidth
-                        label="Department Name"
-                        name="departmentName"
-                        onChange={handleChangeDepartmentDeatils}
-                        required
-                        select
-                        SelectProps={{ native: true }}
-                        value={DepartmentValues.departmentName}
-                      >
-                        {deparments.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </TextField>
+                    <Grid container spacing={3}>
+                      <Emp_Department link={emp_dep} />
                     </Grid>
-                    <Grid xs={12} md={6}>
-                      <Typography variant="h4" marginLeft={10}>
-                        {totalLeaves}
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      sx={{
-                        marginLeft: '10px',
-                      }}
-                    >
-                      <Button
-                        variant="contained"
-                        sx={{
-                          backgroundColor: '#B514EE', // Set the initial background color
-                          ':hover': {
-                            backgroundColor: '#B514EE',
-                            outlineColor: '#B514EE', // Change background color on hover
-                          },
-                          ':active': {
-                            backgroundColor: colors.purple[700], // Change background color when active (clicked)
-                          },
+                  </Card>
+                </Grid>
 
-                          borderRadius: '20px',
-                          marginLeft: '20px',
-                        }}
-                        onClick={() => {
-                          axios
-                            .get(
-                              'http://localhost:8000/emp/report/total_leaves/' +
-                                DepartmentValues.departmentName
-                            )
-                            .then((res) => {
-                              console.log(res.data);
-                              setTotalLeaves(res.data[0].result);
-                            })
-                            .catch((err) => {
-                              console.log(err);
-                            });
-                        }}
-                      >
-                        Search
-                      </Button>
+                {/* Total Leaves Section */}
+                <Grid item xs={12}>
+                  <Card sx={{ p: 3, boxShadow: 3 }}>
+                    <Typography variant="h4" sx={{ mb: 3, fontWeight: 500 }}>
+                      Total Leaves by Department
+                    </Typography>
+                    <Grid container spacing={3} alignItems="center">
+                      <Grid item xs={12} md={6}>
+                        <TextField
+                          fullWidth
+                          label="Department Name"
+                          name="departmentName"
+                          onChange={handleChangeDepartmentDeatils}
+                          required
+                          select
+                          SelectProps={{ native: true }}
+                          value={DepartmentValues.departmentName}
+                        >
+                          {deparments.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </TextField>
+                      </Grid>
+                      <Grid item xs={12} md={4}>
+                        <Typography variant="h5" sx={{ textAlign: 'center' }}>
+                          Total Leaves: {totalLeaves || 0}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} md={2}>
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          sx={{
+                            backgroundColor: '#B514EE',
+                            '&:hover': {
+                              backgroundColor: '#9610CC',
+                            },
+                            borderRadius: '8px',
+                            py: 1.5,
+                          }}
+                          onClick={() => {
+                            axios
+                              .get(
+                                'http://localhost:8000/emp/report/total_leaves/' +
+                                  DepartmentValues.departmentName
+                              )
+                              .then((res) => {
+                                setTotalLeaves(res.data[0].result);
+                              })
+                              .catch((err) => {
+                                console.log(err);
+                              });
+                          }}
+                        >
+                          Search
+                        </Button>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                  <box>
-                    <Typography variant="h4"> Employee by Pay Grade</Typography>
-                  </box>
-                  <br />
-                  <Grid container spacing={3}>
-                    <Emp_PayGrade link={emp_paygrade} />
-                  </Grid>
-                  <br />
-                  <box></box>
-                </div>
-              </Stack>
+                  </Card>
+                </Grid>
+
+                {/* Employee by Pay Grade Section */}
+                <Grid item xs={12}>
+                  <Card sx={{ p: 3, boxShadow: 3 }}>
+                    <Typography variant="h4" sx={{ mb: 3, fontWeight: 500 }}>
+                      Employee by Pay Grade
+                    </Typography>
+                    <Grid container spacing={3}>
+                      <Emp_PayGrade link={emp_paygrade} />
+                    </Grid>
+                  </Card>
+                </Grid>
+              </Grid>
             </Container>
           </Box>
         </Box>

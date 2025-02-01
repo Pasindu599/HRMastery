@@ -66,81 +66,61 @@ const Table = (props) => {
   const { globalFilter } = state;
 
   return (
-    <Grid
-      sx={{
-        width: '100%',
-      }}
-    >
-      <Grid
-        display={'flex'}
-        sx={{
-          margin: '20px',
-          justifyContent: 'space-between',
-        }}
-      >
-        {/* <Grid minWidth={'50%'}>
-          <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-        </Grid> */}
-        <Grid xs={12} md={6}>
-          <TextField
-            fullWidth
-            label="Department Name"
-            name="departmentName"
-            onChange={handleChangeDepartmentDeatils}
-            required
-            select
-            SelectProps={{ native: true }}
-            value={DepartmentValues.departmentName}
-          >
-            {deparments.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </TextField>
-        </Grid>
-        <Grid
-          sx={{
-            margin: '20px',
-          }}
-        >
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: '#B514EE', // Set the initial background color
-              ':hover': {
+    <Grid container spacing={3}>
+      <Grid item xs={12}>
+        <Grid container spacing={2} alignItems="center" sx={{ mb: 3 }}>
+          <Grid item xs={12} md={8}>
+            <TextField
+              fullWidth
+              label="Department Name"
+              name="departmentName"
+              onChange={handleChangeDepartmentDeatils}
+              required
+              select
+              SelectProps={{ 
+                native: true,
+                sx: { borderRadius: '8px' }
+              }}
+              value={DepartmentValues.departmentName}
+              sx={{ backgroundColor: 'white' }}
+            >
+              {deparments.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{
                 backgroundColor: '#B514EE',
-                outlineColor: '#B514EE', // Change background color on hover
-              },
-              ':active': {
-                backgroundColor: colors.purple[700], // Change background color when active (clicked)
-              },
-
-              borderRadius: '20px',
-              marginLeft: '20px',
-            }}
-            onClick={() => {
-              axios
-                .get(link + DepartmentValues.departmentName)
-                .then((res) => {
-                  setData(res.data);
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            }}
-          >
-            Search
-          </Button>
+                '&:hover': {
+                  backgroundColor: '#9610CC',
+                },
+                borderRadius: '8px',
+                py: 1.5,
+              }}
+              onClick={() => {
+                axios
+                  .get(link + DepartmentValues.departmentName)
+                  .then((res) => {
+                    setData(res.data);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }}
+            >
+              Search
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
 
-      <Grid
-        sx={{
-          margin: '20px',
-        }}
-      >
-        <table {...getTableProps()}>
+        <div className="table-container">
+          <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
