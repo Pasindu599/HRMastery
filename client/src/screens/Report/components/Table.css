@@ -2,26 +2,44 @@ table {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 table td,
 table th {
-  border: 1px solid #ddd;
-  padding: 8px;
+  padding: 12px 16px;
+  border: 1px solid #edf2f7;
 }
 
 table tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #f8fafc;
 }
 
 table tr:hover {
-  background-color: #ddd;
+  background-color: #edf2f7;
 }
 
 table th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: center;
-  background-color: #b514ee;
+  padding: 16px;
+  text-align: left;
+  background-color: #B514EE;
   color: white;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.table-container {
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 16px 0;
 }
